@@ -3,9 +3,22 @@ server:
     uri-encoding: UTF-8
 
 spring:
+  application:
+    name: chatchat
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${MYSQL_URL}
+    username: ${MYSQL_USERNAME}
+    password: ${MYSQL_PASSWORD}
+  data:
+    mongodb:
+      uri: ${MONGO_URI}
+      database: ${MONGO_DATABASE}
+      authentication-database: ${MONGO_AUTH}
   jpa:
     hibernate:
       ddl-auto: update
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
+    show-sql: true
