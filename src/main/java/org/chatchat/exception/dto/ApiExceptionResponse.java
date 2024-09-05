@@ -5,31 +5,27 @@ import lombok.Getter;
 import org.chatchat.exception.ApiException;
 import org.springframework.http.HttpStatus;
 
-@Getter
-@AllArgsConstructor
-public class ApiExceptionResponse {
-
-    private final int errorCode;
-    private final String message;
-    private final String detail;
+public record ApiExceptionResponse(int errorCode, String message, String detail) {
 
     public static ApiExceptionResponse res(final ApiException apiException) {
-        int errorCode = apiException.getErrorType().getErrorCode();
-        String message = apiException.getErrorType().getMessage();
-        String detail = apiException.getDetail();
-        return new ApiExceptionResponse(errorCode, message, detail);
+        return new ApiExceptionResponse(
+                apiException.getErrorType().getErrorCode(),
+                apiException.getErrorType().getMessage(),
+                apiException.getDetail()
+        );
     }
 
     public static ApiExceptionResponse res(final Exception e) {
-        int errorCode = HttpStatus.INTERNAL_SERVER_ERROR.value();
-        String message = HttpStatus.INTERNAL_SERVER_ERROR.name();
-        String detail = e.getMessage();
-        return new ApiExceptionResponse(errorCode, message, detail);
+        return new ApiExceptionResponse(
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                HttpStatus.INTERNAL_SERVER_ERROR.name(),
+                e.getMessage()
+        );
     }
 
     @Override
     public String toString() {
-        return "ErrorResponse{" +
+        return "ApiExceptionResponse {" +
                 "errorCode=" + errorCode +
                 ", message='" + message +
                 ", detail='" + detail +
