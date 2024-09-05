@@ -4,7 +4,7 @@ import jakarta.persistence.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import java.time.ZonedDateTime;
 
-@Document(collation = "chat_messages")
+@Document(collection = "chat_messages")
 public class ChatMessage {
 
     @Id
