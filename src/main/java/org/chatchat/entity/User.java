@@ -22,10 +22,9 @@ public class User extends BaseEntity {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String password;
 
     @OneToMany(mappedBy = "user")
     private List<ChatPart> chatRooms;
-
 }
