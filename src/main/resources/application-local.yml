@@ -1,7 +1,3 @@
-server:
-  tomcat:
-    uri-encoding: UTF-8
-
 spring:
   application:
     name: chatchat
@@ -14,7 +10,6 @@ spring:
     mongodb:
       uri: ${MONGO_URI}
       database: ${MONGO_DATABASE}
-      authentication-database: ${MONGO_AUTH}
   jpa:
     hibernate:
       ddl-auto: update
@@ -22,3 +17,4 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
     show-sql: true
+    defer-datasource-initialization: true
