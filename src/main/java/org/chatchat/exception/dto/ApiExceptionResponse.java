@@ -1,7 +1,5 @@
 package org.chatchat.exception.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import org.chatchat.exception.ApiException;
 import org.springframework.http.HttpStatus;
 

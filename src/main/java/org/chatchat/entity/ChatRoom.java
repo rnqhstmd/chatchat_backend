@@ -24,5 +24,4 @@ public class ChatRoom extends BaseEntity {
 
     @OneToMany(mappedBy = "chatRoom")
     private List<ChatPart> users;
-
 }
