@@ -22,7 +22,7 @@ public class AuthService {
         userQueryService.validateIsDuplicatedEmail(email);
 
         String name = registerDto.name();
-        userQueryService.findExistingUserByName(name);
+        userQueryService.validateIsDuplicatedName(name);
 
         String plainPassword = registerDto.password();
         String encodedPassword = passwordEncoder.encode(plainPassword);
