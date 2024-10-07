@@ -1,7 +1,7 @@
-package org.chatchat.exception;
+package org.chatchat.common.exception;
 
 import lombok.Getter;
-import org.chatchat.exception.type.ErrorType;
+import org.chatchat.common.exception.type.ErrorType;
 import org.springframework.http.HttpStatus;
 
 @Getter

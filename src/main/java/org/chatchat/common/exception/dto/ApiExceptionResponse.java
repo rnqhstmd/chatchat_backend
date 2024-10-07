@@ -1,6 +1,6 @@
-package org.chatchat.exception.dto;
+package org.chatchat.common.exception.dto;
 
-import org.chatchat.exception.ApiException;
+import org.chatchat.common.exception.ApiException;
 import org.springframework.http.HttpStatus;
 
 public record ApiExceptionResponse(int errorCode, String message, String detail) {

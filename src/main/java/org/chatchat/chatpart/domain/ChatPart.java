@@ -1,10 +1,13 @@
-package org.chatchat.entity;
+package org.chatchat.chatpart.domain;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.chatchat.common.entity.BaseEntity;
+import org.chatchat.chatroom.domain.ChatRoom;
+import org.chatchat.user.domain.User;
 
 @Entity
 @Getter

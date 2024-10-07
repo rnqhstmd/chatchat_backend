@@ -1,4 +1,4 @@
-package org.chatchat.entity;
+package org.chatchat.chatmessage.domain;
 
 import jakarta.persistence.Id;
 import lombok.Builder;

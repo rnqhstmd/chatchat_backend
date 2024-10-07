@@ -1,10 +1,8 @@
-package org.chatchat.exception.type;
+package org.chatchat.common.exception.type;
 
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
 
 import lombok.Getter;
-import lombok.ToString;
 
 @Getter
 @AllArgsConstructor

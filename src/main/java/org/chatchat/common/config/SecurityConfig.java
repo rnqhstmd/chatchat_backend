@@ -1,4 +1,4 @@
-package org.chatchat.config;
+package org.chatchat.common.config;
 
 
 import org.springframework.context.annotation.Bean;

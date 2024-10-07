@@ -1,4 +1,4 @@
-package org.chatchat.entity;
+package org.chatchat.common.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;

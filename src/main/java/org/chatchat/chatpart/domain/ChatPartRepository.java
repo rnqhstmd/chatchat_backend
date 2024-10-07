@@ -1,6 +1,6 @@
-package org.chatchat.repository;
+package org.chatchat.chatpart.domain;
 
-import org.chatchat.entity.ChatPart;
+import org.chatchat.chatpart.domain.ChatPart;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ChatPartRepository extends JpaRepository<ChatPart, Long> {

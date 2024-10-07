@@ -1,9 +1,10 @@
-package org.chatchat.exception.controller;
+package org.chatchat.common.exception.controller;
 
 import lombok.extern.slf4j.Slf4j;
-import org.chatchat.exception.*;
-import org.chatchat.exception.dto.ApiExceptionResponse;
-import org.chatchat.exception.type.ErrorType;
+import org.chatchat.common.exception.ApiException;
+import org.chatchat.common.exception.BadRequestException;
+import org.chatchat.common.exception.dto.ApiExceptionResponse;
+import org.chatchat.common.exception.type.ErrorType;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
