@@ -19,8 +19,12 @@ public enum ErrorType {
     NO_RESOURCE_ERROR(40400, "해당 리소스를 찾을 수 없습니다."),
     USER_NOT_FOUND_ERROR(40401,"해당 유저를 찾을 수 없습니다."),
 
-    //Http
+    //HTTP
     METHOD_NOT_ALLOWED_ERROR(40500, "잘못된 HTTP 메서드입니다."),
+
+    //CONFLICT
+    DUPLICATED_EMAIL_ERROR(40900, "이미 사용 중인 이메일입니다."),
+    DUPLICATED_NAME_ERROR(40901, "이미 사용 중인 이름입니다."),
 
     //Validation
     NOT_NULL_VALID_ERROR(90100, "필수값이 누락되었습니다."),
