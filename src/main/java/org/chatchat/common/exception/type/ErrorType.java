@@ -8,8 +8,16 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum ErrorType {
 
-    //NOT_FOUND_ERROR
+    //BAD_REQUEST
+    JWT_PARSING_ERROR(40000,"JWT Token 형식이 올바르지 않습니다."),
+
+    //UNAUTHORIZED
+    JWT_EXPIRED_ERROR(40100, "Jwt Token의 유효 기간이 만료되었습니다."),
+    JWT_NOT_INCLUDED_ERROR(40402, "요청에 Jwt Token이 포함되지 않았습니다."),
+
+    //NOT_FOUND
     NO_RESOURCE_ERROR(40400, "해당 리소스를 찾을 수 없습니다."),
+    USER_NOT_FOUND_ERROR(40401,"해당 유저를 찾을 수 없습니다."),
 
     //Http
     METHOD_NOT_ALLOWED_ERROR(40500, "잘못된 HTTP 메서드입니다."),
