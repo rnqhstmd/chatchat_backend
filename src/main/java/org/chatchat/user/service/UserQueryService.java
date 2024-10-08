@@ -15,6 +15,11 @@ public class UserQueryService {
 
     private final UserRepository userRepository;
 
+    public User findExistingUserByName(String userName) {
+        return userRepository.findByName(userName)
+                .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND_ERROR));
+    }
+
     public User findExistingUserByEmail(String email) {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND_ERROR));
