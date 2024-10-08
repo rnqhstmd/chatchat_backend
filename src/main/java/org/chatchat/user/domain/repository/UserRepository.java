@@ -1,5 +1,6 @@
-package org.chatchat.user.domain;
+package org.chatchat.user.domain.repository;
 
+import org.chatchat.user.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

@@ -1,4 +1,4 @@
-package org.chatchat.chatpart.domain;
+package org.chatchat.chatpart.domain.repository;
 
 import org.chatchat.chatpart.domain.ChatPart;
 import org.springframework.data.jpa.repository.JpaRepository;
