@@ -23,6 +23,7 @@ public enum ErrorType {
     DUPLICATED_EMAIL_ERROR( "USER_40900", "이미 사용 중인 이메일입니다."),
     DUPLICATED_NAME_ERROR( "USER_40901", "이미 사용 중인 이름입니다."),
     USER_NOT_FOUND_ERROR( "USER_40400", "해당 유저를 찾을 수 없습니다."),
+    INVALID_CREDENTIAL_ERROR("USER_40100", "아이디나 비밀번호가 일치하지 않습니다."),
 
     //Validation
     NOT_NULL_VALID_ERROR( "VALID_90000", "필수값이 누락되었습니다."),
