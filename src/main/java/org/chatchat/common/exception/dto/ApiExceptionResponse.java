@@ -3,7 +3,7 @@ package org.chatchat.common.exception.dto;
 import org.chatchat.common.exception.ApiException;
 import org.springframework.http.HttpStatus;
 
-public record ApiExceptionResponse(int errorCode, String message, String detail) {
+public record ApiExceptionResponse(String errorCode, String message, String detail) {
 
     public static ApiExceptionResponse res(final ApiException apiException) {
         return new ApiExceptionResponse(
@@ -15,8 +15,8 @@ public record ApiExceptionResponse(int errorCode, String message, String detail)
 
     public static ApiExceptionResponse res(final Exception e) {
         return new ApiExceptionResponse(
-                HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 HttpStatus.INTERNAL_SERVER_ERROR.name(),
+                "서버 내부 오류가 발생했습니다.",
                 e.getMessage()
         );
     }

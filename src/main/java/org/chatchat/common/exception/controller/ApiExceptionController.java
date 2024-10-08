@@ -38,7 +38,7 @@ public class ApiExceptionController {
         }
 
         ApiExceptionResponse response = new ApiExceptionResponse(
-                HttpStatus.BAD_REQUEST.value(),
+                HttpStatus.BAD_REQUEST.name(),
                 "Validation Error",
                 "Request validation failed without specific field errors."
         );
