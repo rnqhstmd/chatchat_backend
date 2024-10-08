@@ -3,7 +3,7 @@ package org.chatchat.security.auth.service;
 import lombok.RequiredArgsConstructor;
 import org.chatchat.common.exception.UnauthorizedException;
 import org.chatchat.security.auth.dto.request.LoginRequest;
-import org.chatchat.security.auth.dto.request.RegisterDto;
+import org.chatchat.security.auth.dto.request.SignupRequest;
 import org.chatchat.security.auth.dto.response.LoginResponse;
 import org.chatchat.security.jwt.JwtProvider;
 import org.chatchat.user.domain.User;
@@ -26,7 +26,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtProvider jwtProvider;
 
-    public void register(RegisterDto signUpRequest) {
+    public void register(SignupRequest signUpRequest) {
 
         String email = signUpRequest.email();
         userQueryService.validateIsDuplicatedEmail(email);

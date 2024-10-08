@@ -3,7 +3,7 @@ package org.chatchat.security.auth.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.chatchat.security.auth.dto.request.LoginRequest;
-import org.chatchat.security.auth.dto.request.RegisterDto;
+import org.chatchat.security.auth.dto.request.SignupRequest;
 import org.chatchat.security.auth.dto.response.LoginResponse;
 import org.chatchat.security.auth.service.AuthService;
 import org.springframework.http.HttpStatus;
@@ -18,7 +18,7 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/sign-up")
-    public ResponseEntity<Void> register(@Valid @RequestBody RegisterDto signUpRequest) {
+    public ResponseEntity<Void> register(@Valid @RequestBody SignupRequest signUpRequest) {
         authService.register(signUpRequest);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
