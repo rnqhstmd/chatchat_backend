@@ -20,7 +20,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private static final String[] WHITE_LIST = {
-            "/v3/api-docs/**", "/swagger-ui/**", "/swagger-resources/**", "/", "/api/auth/sign-up", "/error/**", "/swagger", "/swagger/**"
+            "/v3/api-docs/**", "/swagger-ui/**", "/swagger-resources/**", "/", "/api/auth/sign-up","/api/auth/login",
+            "/error/**", "/swagger", "/swagger/**"
     };
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final CustomAuthenticationEntryPoint authenticationEntryPoint;
