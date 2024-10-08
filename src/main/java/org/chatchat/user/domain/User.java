@@ -25,7 +25,7 @@ public class User extends BaseEntity {
     private String email;
 
     @Column(nullable = false, unique = true)
-    private String name;
+    private String username;
 
     @Column(nullable = false)
     private String password;
@@ -33,9 +33,9 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "user")
     private List<ChatPart> chatRooms;
 
-    public User(String email, String name, String password) {
+    public User(String email, String username, String password) {
         this.email = email;
-        this.name = name;
+        this.username = username;
         this.password = password;
     }
 }
