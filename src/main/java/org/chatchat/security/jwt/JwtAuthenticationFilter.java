@@ -24,7 +24,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(final HttpServletRequest request, final HttpServletResponse response,
                                     final FilterChain filterChain) throws ServletException, IOException {
-
         String requestURI = request.getRequestURI();
         if (isPublicUri(requestURI)) {
             // Public uri 일 경우 검증 안함
@@ -51,9 +50,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 throw new UnauthorizedException(ErrorType.JWT_PARSING_ERROR);
             }
         }
-
         filterChain.doFilter(request, response);
-
     }
 
     private boolean isBearer(final String authorizationHeader) {
@@ -67,7 +64,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         requestURI.startsWith("/v3/api-docs/**") ||
                         requestURI.startsWith("/favicon.ico") ||
                         requestURI.startsWith("/error") ||
-                        requestURI.startsWith("/api/auth/sign-up");
+                        requestURI.startsWith("/api/auth/sign-up")||
+                        requestURI.startsWith("/api/auth/login");
     }
 }
 
