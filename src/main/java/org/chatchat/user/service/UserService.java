@@ -2,7 +2,7 @@ package org.chatchat.user.service;
 
 import lombok.RequiredArgsConstructor;
 import org.chatchat.user.domain.User;
-import org.chatchat.user.domain.UserRepository;
+import org.chatchat.user.domain.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

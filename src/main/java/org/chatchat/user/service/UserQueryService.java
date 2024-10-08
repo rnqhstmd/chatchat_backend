@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.chatchat.common.exception.ConflictException;
 import org.chatchat.common.exception.NotFoundException;
 import org.chatchat.user.domain.User;
-import org.chatchat.user.domain.UserRepository;
+import org.chatchat.user.domain.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import static org.chatchat.common.exception.type.ErrorType.*;
