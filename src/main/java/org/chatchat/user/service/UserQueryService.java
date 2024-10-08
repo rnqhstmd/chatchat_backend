@@ -15,11 +15,6 @@ public class UserQueryService {
 
     private final UserRepository userRepository;
 
-    public User findExistingUserByName(String userName) {
-        return userRepository.findByName(userName)
-                .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND_ERROR));
-    }
-
     public User findExistingUserByEmail(String email) {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND_ERROR));
@@ -32,7 +27,7 @@ public class UserQueryService {
     }
 
     public void validateIsDuplicatedName(String name) {
-        if (userRepository.existsByName(name)) {
+        if (userRepository.existsByUsername(name)) {
             throw  new ConflictException(DUPLICATED_NAME_ERROR);
         }
     }
