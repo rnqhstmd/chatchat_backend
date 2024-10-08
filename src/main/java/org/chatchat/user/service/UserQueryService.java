@@ -26,13 +26,13 @@ public class UserQueryService {
     }
 
     public void validateIsDuplicatedEmail(String email) {
-        if (userRepository.existsByEmail(email)) {
+        if (!userRepository.existsByEmail(email)) {
             throw  new ConflictException(DUPLICATED_EMAIL_ERROR);
         }
     }
 
     public void validateIsDuplicatedName(String name) {
-        if (userRepository.existsByUsername(name)) {
+        if (!userRepository.existsByName(name)) {
             throw  new ConflictException(DUPLICATED_NAME_ERROR);
         }
     }
