@@ -18,12 +18,12 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "chat_rooms")
-public class ChatRoom extends BaseEntity {
+@Table(name = "rooms")
+public class Room extends BaseEntity {
 
     @Column(nullable = false, unique = true)
     private String name;
 
-    @OneToMany(mappedBy = "chatRoom")
+    @OneToMany(mappedBy = "Room")
     private List<ChatPart> users;
 }

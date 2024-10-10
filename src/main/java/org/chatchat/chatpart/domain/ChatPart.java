@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.chatchat.common.entity.BaseEntity;
-import org.chatchat.chatroom.domain.ChatRoom;
+import org.chatchat.chatroom.domain.Room;
 import org.chatchat.user.domain.User;
 
 @Entity
@@ -18,8 +18,8 @@ import org.chatchat.user.domain.User;
 public class ChatPart extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "chat_room_id", nullable = false)
-    private ChatRoom chatRoom;
+    @JoinColumn(name = "room_id", nullable = false)
+    private Room room;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
