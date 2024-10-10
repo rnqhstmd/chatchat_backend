@@ -20,7 +20,7 @@ public enum ErrorType {
     INVALID_CREDENTIAL_ERROR("USER_40100", "아이디나 비밀번호가 일치하지 않습니다."),
 
     // Resource
-    NO_RESOURCE_ERROR( "RESOURCE_40400", "해당 리소스를 찾을 수 없습니다."),
+    NO_RESOURCE_ERROR( "RESOURCE_40000", "해당 리소스를 찾을 수 없습니다."),
 
     // HTTP
     METHOD_NOT_ALLOWED_ERROR( "HTTP_40500", "잘못된 HTTP 메서드입니다."),
