@@ -11,7 +11,6 @@ import java.util.Date;
 import javax.crypto.SecretKey;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.chatchat.common.exception.BadRequestException;
 import org.chatchat.common.exception.UnauthorizedException;
 import org.chatchat.user.domain.User;
@@ -25,14 +24,15 @@ import static org.chatchat.common.exception.type.ErrorType.JWT_EXPIRED_ERROR;
 import static org.chatchat.common.exception.type.ErrorType.JWT_PARSING_ERROR;
 
 @Component
-@Slf4j
 @RequiredArgsConstructor
 public class JwtProvider {
 
-    public static final long ACCESS_TOKEN_VALID_TIME = 7 * 24 * 60 * 60 * 1000L;
+
     private final UserQueryService userQueryService;
-    @Value("${jwt.secret.key}")
+    @Value("${security.jwt.token.access-secret-key}")
     private String key;
+    @Value("${security.jwt.token.access-expire-length}")
+    public int validityInMilliseconds;
 
     public String generateJwtToken(final String email) {
         Claims claims = createClaims(email);
@@ -55,7 +55,7 @@ public class JwtProvider {
 
     // JWT 만료 시간 계산
     private long calculateExpirationDate(final Date now) {
-        return now.getTime() + ACCESS_TOKEN_VALID_TIME;
+        return now.getTime() + validityInMilliseconds;
     }
 
     // Key 생성
