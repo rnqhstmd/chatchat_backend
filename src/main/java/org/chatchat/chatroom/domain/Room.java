@@ -26,4 +26,8 @@ public class Room extends BaseEntity {
 
     @OneToMany(mappedBy = "Room")
     private List<ChatPart> users;
+
+    public Room(String name) {
+        this.name = name;
+    }
 }
