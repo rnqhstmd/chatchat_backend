@@ -13,6 +13,9 @@ public enum ErrorType {
     JWT_EXPIRED_ERROR("JWT_40100", "Jwt Token의 유효 기간이 만료되었습니다."),
     JWT_NOT_INCLUDED_ERROR("JWT_40101", "요청에 Jwt Token이 포함되지 않았습니다."),
 
+    // Auth
+    NO_AUTHORIZATION_ERROR("AUTH_40100", "인증이 없는 사용자입니다."),
+
     // User
     DUPLICATED_EMAIL_ERROR( "USER_40900", "이미 사용 중인 이메일입니다."),
     DUPLICATED_NAME_ERROR( "USER_40901", "이미 사용 중인 이름입니다."),
