@@ -1,4 +1,4 @@
-package org.chatchat.security.auth.filter;
+package org.chatchat.security.auth.logger;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

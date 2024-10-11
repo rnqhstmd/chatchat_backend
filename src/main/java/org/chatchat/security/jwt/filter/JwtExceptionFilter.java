@@ -1,4 +1,4 @@
-package org.chatchat.security.auth.filter;
+package org.chatchat.security.jwt.filter;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;

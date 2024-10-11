@@ -2,10 +2,10 @@ package org.chatchat.common.config;
 
 
 import lombok.RequiredArgsConstructor;
-import org.chatchat.security.auth.filter.GlobalLoggerFilter;
-import org.chatchat.security.auth.filter.JwtExceptionFilter;
+import org.chatchat.security.auth.logger.GlobalLoggerFilter;
+import org.chatchat.security.jwt.filter.JwtExceptionFilter;
 import org.chatchat.security.auth.handler.CustomAuthenticationEntryPoint;
-import org.chatchat.security.jwt.JwtAuthenticationFilter;
+import org.chatchat.security.jwt.filter.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
