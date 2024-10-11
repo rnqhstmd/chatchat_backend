@@ -8,13 +8,17 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum ErrorType {
 
-    //JWT
-    JWT_PARSING_ERROR("JWT_40000", "JWT Token 형식이 올바르지 않습니다."),
-    JWT_EXPIRED_ERROR("JWT_40100", "Jwt Token의 유효 기간이 만료되었습니다."),
-    JWT_NOT_INCLUDED_ERROR("JWT_40101", "요청에 Jwt Token이 포함되지 않았습니다."),
+    // TOKEN
+    TOKEN_EXPIRED_ERROR("TOKEN_40100", "토큰의 유효 기간이 만료되었습니다."),
+    TOKEN_NOT_INCLUDED_ERROR("TOKEN_40101", "요청에 토큰이 포함되지 않았습니다."),
+    TOKEN_MALFORMED_ERROR("TOKEN_40102", "토큰 형식이 올바르지 않습니다."),
+    TOKEN_TYPE_ERROR("TOKEN_40103", "토큰 타입이 일치하지 않거나 비어있습니다."),
+    TOKEN_UNSUPPORTED_ERROR("TOKEN_40104", "지원하지 않는 토큰입니다."),
+    TOKEN_UNKNOWN_ERROR("TOKEN_40105", "알 수 없는 토큰입니다."),
 
     // Auth
     NO_AUTHORIZATION_ERROR("AUTH_40100", "인증이 없는 사용자입니다."),
+    ACCESS_DENIED_ERROR("AUTH_40300", "접근 권한이 없습니다."),
 
     // User
     DUPLICATED_EMAIL_ERROR( "USER_40900", "이미 사용 중인 이메일입니다."),
@@ -27,6 +31,9 @@ public enum ErrorType {
 
     // HTTP
     METHOD_NOT_ALLOWED_ERROR( "HTTP_40500", "잘못된 HTTP 메서드입니다."),
+
+    // INTERNAL_SERVER
+    INTERNAL_SERVER_ERROR("INTERNAL_50000", "서버 내부 에러입니다."),
 
     // Validation
     NOT_NULL_VALID_ERROR( "VALID_90000", "필수값이 누락되었습니다."),
