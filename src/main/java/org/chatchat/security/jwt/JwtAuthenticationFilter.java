@@ -7,12 +7,13 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.chatchat.common.exception.ApiException;
-import org.chatchat.common.exception.UnauthorizedException;
-import org.chatchat.common.exception.type.ErrorType;
+import org.chatchat.common.exception.InternalServerException;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+
+import static org.chatchat.common.exception.type.ErrorType.INTERNAL_SERVER_ERROR;
 
 @Component
 @RequiredArgsConstructor
@@ -47,7 +48,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         new InsufficientAuthenticationException(e.getMessage(), e));
                 return;
             } catch (Exception e) {
-                throw new UnauthorizedException(ErrorType.JWT_PARSING_ERROR);
+                throw new InternalServerException(INTERNAL_SERVER_ERROR, e.getMessage());
             }
         }
         filterChain.doFilter(request, response);
