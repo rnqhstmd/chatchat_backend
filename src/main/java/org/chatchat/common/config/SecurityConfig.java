@@ -2,6 +2,8 @@ package org.chatchat.common.config;
 
 
 import lombok.RequiredArgsConstructor;
+import org.chatchat.security.auth.filter.GlobalLoggerFilter;
+import org.chatchat.security.auth.filter.JwtExceptionFilter;
 import org.chatchat.security.auth.handler.CustomAuthenticationEntryPoint;
 import org.chatchat.security.jwt.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
@@ -20,7 +22,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private static final String[] WHITE_LIST = {
-            "/v3/api-docs/**", "/swagger-ui/**", "/swagger-resources/**", "/", "/api/auth/sign-up","/api/auth/login",
+            "/v3/api-docs/**", "/swagger-ui/**", "/swagger-resources/**", "/", "/api/auth/sign-up", "/api/auth/login",
             "/error/**", "/swagger", "/swagger/**"
     };
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
@@ -36,7 +38,8 @@ public class SecurityConfig {
                 )
                 .exceptionHandling(exceptionHandler -> exceptionHandler
                         .authenticationEntryPoint(authenticationEntryPoint)
-                );
+                )
+                .addFilterBefore(new GlobalLoggerFilter(), JwtExceptionFilter.class);
 
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();

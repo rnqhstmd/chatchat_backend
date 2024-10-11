@@ -31,7 +31,7 @@ public class User extends BaseEntity {
     private String password;
 
     @OneToMany(mappedBy = "user")
-    private List<ChatPart> chatRooms;
+    private List<ChatPart> chatParts;
 
     public User(String email, String username, String password) {
         this.email = email;
