@@ -2,7 +2,7 @@ package org.chatchat.security.auth.argumentresolver;
 
 import org.chatchat.common.exception.UnauthorizedException;
 import org.chatchat.security.auth.annotation.AuthUser;
-import org.chatchat.security.auth.dto.response.UserPrincipal;
+import org.chatchat.user.domain.User;
 import org.springframework.core.MethodParameter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -27,9 +27,8 @@ public class AuthUserArgumentResolver implements HandlerMethodArgumentResolver {
                                   WebDataBinderFactory binderFactory) throws Exception {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        if (authentication != null && authentication.getPrincipal() instanceof UserPrincipal) {
-            UserPrincipal principal = (UserPrincipal) authentication.getPrincipal();
-            return principal.getUser();
+        if (authentication != null && authentication.getPrincipal() instanceof User) {
+            return authentication.getPrincipal();
         }
 
         throw new UnauthorizedException(NO_AUTHORIZATION_ERROR);
