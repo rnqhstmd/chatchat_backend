@@ -19,10 +19,10 @@ import java.util.List;
 @Table(name = "rooms")
 public class Room extends BaseEntity {
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ChatPart> users = new ArrayList<>();
 
     public Room(String name) {
