@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
-import static org.chatchat.common.exception.type.ErrorType.JWT_NOT_INCLUDED_ERROR;
+import static org.chatchat.common.exception.type.ErrorType.TOKEN_NOT_INCLUDED_ERROR;
 
 @Component
 public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
@@ -25,7 +25,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
             return;
         }
 
-        ApiException apiException = new UnauthorizedException(JWT_NOT_INCLUDED_ERROR);
+        ApiException apiException = new UnauthorizedException(TOKEN_NOT_INCLUDED_ERROR);
         setResponse(response, apiException);
     }
 
