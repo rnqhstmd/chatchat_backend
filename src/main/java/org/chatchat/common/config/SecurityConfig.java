@@ -15,6 +15,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
@@ -22,15 +25,17 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private static final String[] WHITE_LIST = {
-            "/v3/api-docs/**", "/swagger-ui/**", "/swagger-resources/**", "/", "/api/auth/sign-up", "/api/auth/login",
-            "/error/**", "/swagger", "/swagger/**"
+            "/v3/api-docs/**", "/swagger-ui/**", "/swagger-resources/**", "/", "/api/auth/**",
+            "/error/**", "/swagger", "/swagger/**",  "/ws/**"
     };
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final CustomAuthenticationEntryPoint authenticationEntryPoint;
+    private final JwtExceptionFilter jwtExceptionFilter;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> request
                         .requestMatchers(WHITE_LIST).permitAll()
@@ -39,10 +44,23 @@ public class SecurityConfig {
                 .exceptionHandling(exceptionHandler -> exceptionHandler
                         .authenticationEntryPoint(authenticationEntryPoint)
                 )
-                .addFilterBefore(new GlobalLoggerFilter(), JwtExceptionFilter.class);
-
-        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new GlobalLoggerFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(jwtExceptionFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.addAllowedOrigin("*");  // 허용할 도메인 설정
+        configuration.addAllowedMethod("*");  // 모든 HTTP 메서드 허용 (GET, POST 등)
+        configuration.addAllowedHeader("*");  // 모든 헤더 허용
+        configuration.setAllowCredentials(true);  // 쿠키 및 인증 정보 허용
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 
     @Bean
