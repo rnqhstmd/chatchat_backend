@@ -6,6 +6,7 @@ import org.chatchat.user.domain.User;
 import org.springframework.core.MethodParameter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -13,6 +14,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 
 import static org.chatchat.common.exception.type.ErrorType.NO_AUTHORIZATION_ERROR;
 
+@Component
 public class AuthUserArgumentResolver implements HandlerMethodArgumentResolver {
 
     @Override
