@@ -18,7 +18,7 @@ public class ChatMessageService {
     private final RoomQueryService roomQueryService;
 
     public ChatMessage saveMessage(MessageRequest messageRequest, User user) {
-        Room room = roomQueryService.findExistingRoomById(Long.valueOf(messageRequest.room_id()));
+        Room room = roomQueryService.findExistingRoomById(messageRequest.roomId());
         String content = messageRequest.message();
         ChatMessage chatMessage = ChatMessage.builder()
                 .roomId(String.valueOf(room.getId()))
