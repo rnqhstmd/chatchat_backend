@@ -11,14 +11,14 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.chatchat.common.exception.ApiException;
 import org.chatchat.common.exception.type.ErrorType;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
 @Slf4j
+@Component
 public class JwtExceptionFilter extends OncePerRequestFilter {
-
-    private static final String JWT_TOKEN_EXCEPTION = "JwtTokenException";
 
     @Override
     protected void doFilterInternal(
@@ -29,36 +29,34 @@ public class JwtExceptionFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
         } catch (SecurityException e) {
             log.error("FilterException throw SecurityException Exception : {}", e.getMessage());
-            request.setAttribute(JWT_TOKEN_EXCEPTION, ErrorType.NO_AUTHORIZATION_ERROR);
-            filterChain.doFilter(request, response);
+            setErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED, ErrorType.NO_AUTHORIZATION_ERROR);
         } catch (MalformedJwtException e) {
             log.error("FilterException throw MalformedJwtException Exception : {}", e.getMessage());
-            request.setAttribute(JWT_TOKEN_EXCEPTION, ErrorType.TOKEN_MALFORMED_ERROR);
-            filterChain.doFilter(request, response);
+            setErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED, ErrorType.TOKEN_MALFORMED_ERROR);
         } catch (IllegalArgumentException e) {
             log.error("FilterException throw IllegalArgumentException Exception : {}", e.getMessage());
-            request.setAttribute(JWT_TOKEN_EXCEPTION, ErrorType.TOKEN_TYPE_ERROR);
-            filterChain.doFilter(request, response);
+            setErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED, ErrorType.TOKEN_TYPE_ERROR);
         } catch (ExpiredJwtException e) {
             log.error("FilterException throw ExpiredJwtException Exception : {}", e.getMessage());
-            request.setAttribute(JWT_TOKEN_EXCEPTION, ErrorType.TOKEN_EXPIRED_ERROR);
-            filterChain.doFilter(request, response);
+            setErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED, ErrorType.TOKEN_EXPIRED_ERROR);
         } catch (UnsupportedJwtException e) {
             log.error("FilterException throw UnsupportedJwtException Exception : {}", e.getMessage());
-            request.setAttribute(JWT_TOKEN_EXCEPTION, ErrorType.TOKEN_UNSUPPORTED_ERROR);
-            filterChain.doFilter(request, response);
+            setErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED, ErrorType.TOKEN_UNSUPPORTED_ERROR);
         } catch (JwtException e) {
             log.error("FilterException throw JwtException Exception : {}", e.getMessage());
-            request.setAttribute(JWT_TOKEN_EXCEPTION, ErrorType.TOKEN_UNKNOWN_ERROR);
-            filterChain.doFilter(request, response);
+            setErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED, ErrorType.TOKEN_UNKNOWN_ERROR);
         } catch (ApiException e) {
             log.error("FilterException throw Exception Exception : {}", e.getMessage());
-            request.setAttribute(JWT_TOKEN_EXCEPTION, e.getErrorType());
-            filterChain.doFilter(request, response);
+            setErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED, ErrorType.TOKEN_UNKNOWN_ERROR);
         } catch (Exception e) {
             log.error("FilterException throw Exception Exception : {}", e.getMessage());
-            request.setAttribute(JWT_TOKEN_EXCEPTION,ErrorType.INTERNAL_SERVER_ERROR);
-            filterChain.doFilter(request, response);
+            setErrorResponse(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, ErrorType.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    private void setErrorResponse(HttpServletResponse response, int status, ErrorType errorType) throws IOException {
+        response.setStatus(status);
+        response.setContentType("application/json;charset=UTF-8");
+        response.getWriter().write("{\"status\":\"" + status + "\",\"errorCode\":\"" + errorType.getErrorCode() + "\",\"message\":\"" + errorType.getMessage() + "\"}");
     }
 }

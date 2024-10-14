@@ -7,11 +7,11 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Collections;
 import java.util.Date;
 import javax.crypto.SecretKey;
 
 import lombok.RequiredArgsConstructor;
-import org.chatchat.common.exception.BadRequestException;
 import org.chatchat.common.exception.UnauthorizedException;
 import org.chatchat.user.domain.User;
 import org.chatchat.user.service.UserQueryService;
@@ -20,8 +20,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
-import static org.chatchat.common.exception.type.ErrorType.JWT_EXPIRED_ERROR;
-import static org.chatchat.common.exception.type.ErrorType.JWT_PARSING_ERROR;
+import static org.chatchat.common.exception.type.ErrorType.TOKEN_EXPIRED_ERROR;
+import static org.chatchat.common.exception.type.ErrorType.TOKEN_MALFORMED_ERROR;
 
 @Component
 @RequiredArgsConstructor
@@ -73,9 +73,9 @@ public class JwtProvider {
                     .parseClaimsJws(jwtToken);
 
         } catch (ExpiredJwtException e) { // 어세스 토큰 만료
-            throw new UnauthorizedException(JWT_EXPIRED_ERROR);
+            throw new UnauthorizedException(TOKEN_EXPIRED_ERROR);
         } catch (io.jsonwebtoken.MalformedJwtException e) {
-            throw new BadRequestException(JWT_PARSING_ERROR, e.getMessage());
+            throw new UnauthorizedException(TOKEN_MALFORMED_ERROR, e.getMessage());
         }
     }
 
@@ -93,7 +93,7 @@ public class JwtProvider {
 
     private void setContextHolder(String jwtToken, User loginUser) {
         UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(loginUser, jwtToken);
+                new UsernamePasswordAuthenticationToken(loginUser, jwtToken, Collections.emptyList());
 
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
     }

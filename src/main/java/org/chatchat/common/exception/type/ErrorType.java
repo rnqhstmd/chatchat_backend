@@ -8,7 +8,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum ErrorType {
 
-    // TOKEN
+    // Token
     TOKEN_EXPIRED_ERROR("TOKEN_40100", "토큰의 유효 기간이 만료되었습니다."),
     TOKEN_NOT_INCLUDED_ERROR("TOKEN_40101", "요청에 토큰이 포함되지 않았습니다."),
     TOKEN_MALFORMED_ERROR("TOKEN_40102", "토큰 형식이 올바르지 않습니다."),
@@ -26,13 +26,17 @@ public enum ErrorType {
     USER_NOT_FOUND_ERROR( "USER_40400", "해당 유저를 찾을 수 없습니다."),
     INVALID_CREDENTIAL_ERROR("USER_40100", "아이디나 비밀번호가 일치하지 않습니다."),
 
+    // Room
+    ROOM_NOT_FOUND_ERROR("ROOM_40400", "채팅방을 찾을 수 없습니다."),
+    DUPLICATED_ROOM_NAME_ERROR("ROOM_40900", "이미 사용 중인 채팅방 이름입니다."),
+
     // Resource
     NO_RESOURCE_ERROR( "RESOURCE_40000", "해당 리소스를 찾을 수 없습니다."),
 
     // HTTP
     METHOD_NOT_ALLOWED_ERROR( "HTTP_40500", "잘못된 HTTP 메서드입니다."),
 
-    // INTERNAL_SERVER
+    // Internal Server
     INTERNAL_SERVER_ERROR("INTERNAL_50000", "서버 내부 에러입니다."),
 
     // Validation
