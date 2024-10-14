@@ -19,6 +19,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.util.Arrays;
+
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -53,8 +55,8 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOrigin("*");  // 허용할 도메인 설정
-        configuration.addAllowedMethod("*");  // 모든 HTTP 메서드 허용 (GET, POST 등)
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));  // 허용할 도메인 설정
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD", "TRACE"));
         configuration.addAllowedHeader("*");  // 모든 헤더 허용
         configuration.setAllowCredentials(true);  // 쿠키 및 인증 정보 허용
 
