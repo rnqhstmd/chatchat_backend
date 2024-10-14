@@ -66,6 +66,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         requestURI.startsWith("/v3/api-docs/**") ||
                         requestURI.startsWith("/favicon.ico") ||
                         requestURI.startsWith("/error") ||
+                        requestURI.startsWith("/ws/**") ||
                         requestURI.startsWith("/api/auth/sign-up")||
                         requestURI.startsWith("/api/auth/login");
     }
