@@ -1,13 +1,13 @@
 package org.chatchat.chatmessage.controller;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.chatchat.chatmessage.domain.ChatMessage;
 import org.chatchat.chatmessage.dto.MessageRequest;
 import org.chatchat.chatmessage.service.ChatMessageService;
 import org.chatchat.chatmessage.util.WebSocketEventListener;
 import org.chatchat.security.auth.annotation.AuthUser;
 import org.chatchat.user.domain.User;
-import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.messaging.simp.annotation.SubscribeMapping;
@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
-
+@Slf4j
 @Controller
 @RequiredArgsConstructor
 public class ChatMessageController {
@@ -52,9 +52,9 @@ public class ChatMessageController {
         return channelList;
     }
 
-    @MessageMapping("/chat/{roomId}")
-    public void sendMessage(@DestinationVariable Long roomId, @RequestBody MessageRequest messageRequest, @AuthUser User user) {
-        ChatMessage chatMessage = chatMessageService.saveMessage(roomId, messageRequest, user);
-        webSocketEventListener.broadcastMessage(roomId, chatMessage);
+    @MessageMapping("/chat")
+    public void sendMessage(@RequestBody MessageRequest messageRequest, @AuthUser User user) {
+        ChatMessage chatMessage = chatMessageService.saveMessage(messageRequest, user);
+        webSocketEventListener.broadcastMessage(messageRequest, chatMessage);
     }
 }

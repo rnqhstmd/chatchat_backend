@@ -3,11 +3,15 @@ package org.chatchat.chatroom.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.chatchat.chatroom.dto.request.CreateRoomRequest;
+import org.chatchat.chatroom.dto.response.RoomInfoResponse;
+import org.chatchat.chatroom.service.RoomQueryService;
 import org.chatchat.chatroom.service.RoomService;
 import org.chatchat.security.auth.annotation.AuthUser;
 import org.chatchat.user.domain.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/rooms")
@@ -15,11 +19,18 @@ import org.springframework.web.bind.annotation.*;
 public class RoomController {
 
     private final RoomService roomService;
+    private final RoomQueryService roomQueryService;
 
     @PostMapping
     public ResponseEntity<Void> createRoom(@RequestBody @Valid CreateRoomRequest createRoomRequest) {
         roomService.createChatRoom(createRoomRequest);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping
+    public ResponseEntity<List<RoomInfoResponse>> getAllRooms() {
+        List<RoomInfoResponse> rooms = roomQueryService.getAllRooms();
+        return ResponseEntity.ok(rooms);
     }
 
     // 채팅방 참가
