@@ -81,12 +81,12 @@ public class JwtProvider {
 
     // jwtToken 으로 Authentication 에 사용자 등록
     public void getAuthenticationFromToken(final String jwtToken) {
-        User loginUser = getMemberByToken(jwtToken);
+        User loginUser = getUserByToken(jwtToken);
         setContextHolder(jwtToken, loginUser);
     }
 
     // token 으로부터 유저 정보 확인
-    private User getMemberByToken(final String jwtToken) {
+    private User getUserByToken(final String jwtToken) {
         String userEmail = getUserEmailFromToken(jwtToken);
         return userQueryService.findExistingUserByEmail(userEmail);
     }
