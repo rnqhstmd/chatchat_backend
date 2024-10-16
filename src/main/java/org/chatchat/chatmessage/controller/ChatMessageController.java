@@ -1,60 +1,46 @@
 package org.chatchat.chatmessage.controller;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.chatchat.chatmessage.domain.ChatMessage;
+import org.chatchat.chatmessage.domain.MessageType;
 import org.chatchat.chatmessage.dto.MessageRequest;
 import org.chatchat.chatmessage.service.ChatMessageService;
-import org.chatchat.chatmessage.util.WebSocketEventListener;
-import org.chatchat.security.auth.annotation.AuthUser;
-import org.chatchat.user.domain.User;
+import org.chatchat.chatroom.dto.request.JoinRoomRequest;
+import org.chatchat.common.exception.UnauthorizedException;
+import org.chatchat.common.exception.type.ErrorType;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
-import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.CopyOnWriteArrayList;
-@Slf4j
 @Controller
 @RequiredArgsConstructor
 public class ChatMessageController {
 
     private final ChatMessageService chatMessageService;
-    private final SimpMessageSendingOperations simpMessageSendingOperations;
-    private final WebSocketEventListener webSocketEventListener;
-    private final List<String> channelList = new CopyOnWriteArrayList<>();
+    private final SimpMessageSendingOperations messagingTemplate;
 
-    @SubscribeMapping("/user-count")
-    public int getInitialUserCount() {
-        return webSocketEventListener.getTotalSubscriberCount();
+    @MessageMapping("/chat.sendMessage")
+    public void sendMessage(@Payload MessageRequest messageRequest, SimpMessageHeaderAccessor headerAccessor) {
+        String username = extractUsername(headerAccessor);
+        ChatMessage chatMessage = chatMessageService.saveMessage(messageRequest, MessageType.TALK, username);
+        messagingTemplate.convertAndSend("/topic/room." + messageRequest.roomId(), chatMessage);
     }
 
-    @SubscribeMapping("/user-list")
-    public Map<String, Set<String>> getInitialUserList() {
-        return webSocketEventListener.getSessionMap();
+    @MessageMapping("/chat.joinRoom")
+    public void addUser(@Payload JoinRoomRequest joinRoomRequest,
+                        SimpMessageHeaderAccessor headerAccessor) {
+        String username = extractUsername(headerAccessor);
+        ChatMessage joinMessage = chatMessageService.joinMessage(joinRoomRequest, MessageType.ENTER, username);
+        messagingTemplate.convertAndSend("/topic/room." + joinRoomRequest.roomId(), joinMessage);
     }
 
-    @MessageMapping("/channel-list")
-    public void channel(String channelName) {
-        if (!channelList.contains(channelName)) {
-            channelList.add(channelName);
+    private String extractUsername(SimpMessageHeaderAccessor headerAccessor) {
+        Object usernameObject = headerAccessor.getSessionAttributes().get("username");
+        if (usernameObject == null) {
+            throw new UnauthorizedException(ErrorType.NO_AUTHORIZATION_ERROR);
         }
-
-        simpMessageSendingOperations.convertAndSend("/sub/room-list", channelList);
-    }
-
-    @SubscribeMapping("/channel-list")
-    public List<String> getInitialChannelList() {
-        return channelList;
-    }
-
-    @MessageMapping("/chat")
-    public void sendMessage(@RequestBody MessageRequest messageRequest, @AuthUser User user) {
-        ChatMessage chatMessage = chatMessageService.saveMessage(messageRequest, user);
-        webSocketEventListener.broadcastMessage(messageRequest, chatMessage);
+        return (String) usernameObject;
     }
 }

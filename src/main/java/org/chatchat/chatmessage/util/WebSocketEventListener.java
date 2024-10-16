@@ -1,74 +1,64 @@
 package org.chatchat.chatmessage.util;
 
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.chatchat.chatmessage.domain.ChatMessage;
+import org.chatchat.chatmessage.domain.MessageType;
+import org.chatchat.common.exception.InternalServerException;
+import org.chatchat.common.exception.UnauthorizedException;
+import org.chatchat.common.exception.type.ErrorType;
 import org.springframework.context.event.EventListener;
+import org.springframework.messaging.Message;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.stereotype.Component;
-import org.springframework.web.socket.messaging.SessionConnectEvent;
+import org.springframework.web.socket.messaging.SessionConnectedEvent;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
-
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class WebSocketEventListener {
 
-    private final SimpMessageSendingOperations simpMessageSendingOperations;
-    private final AtomicInteger totalSubscribers = new AtomicInteger(0);
+    private final SimpMessageSendingOperations messagingTemplate;
 
-    /**
-     * key : name
-     * value : sessionId
-     */
-    @Getter
-    private final Map<String, Set<String>> sessionMap = new ConcurrentHashMap<>();
-
+    // 웹소켓 연결 시 호출되는 메서드
     @EventListener
-    public void handleConnectEvent(SessionConnectEvent event) {
-        totalSubscribers.incrementAndGet();
-        notifyTotalSubscriberCountChanged();
-
-        StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
-        String sessionId = headerAccessor.getSessionId();
-        String nickname = headerAccessor.getFirstNativeHeader("name");
-
-        sessionMap.computeIfAbsent(nickname, k -> ConcurrentHashMap.newKeySet()).add(sessionId);
-
-        log.info("[ {} ][ 세션 연결 ] - nickname: {}", sessionId, nickname);
-        simpMessageSendingOperations.convertAndSend("/sub/user-list", sessionMap);
+    public void handleWebSocketConnectListener(SessionConnectedEvent event) {
+        log.info("New WebSocket connection established.");
+        log.info("event.getMessage(): {}", event.getMessage());
+        StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap((Message<?>) event.getMessage().getHeaders().get("simpConnectMessage"));
+        try {
+            String username = (String) headerAccessor.getSessionAttributes().get("username");
+            if (username == null) {
+                throw new UnauthorizedException(ErrorType.NO_AUTHORIZATION_ERROR, "세션에 username 이 비어있습니다.");
+            }
+        } catch (Exception e) {
+            throw new InternalServerException(ErrorType.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
     }
 
+    // 웹소켓 연결 해제 시 호출되는 메서드
     @EventListener
-    public void handleDisconnectEvent(SessionDisconnectEvent event) {
-        totalSubscribers.decrementAndGet();
-        notifyTotalSubscriberCountChanged();
+    public void handleWebSocketDisconnectListener(SessionDisconnectEvent event) {
+        StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap((Message<?>) event.getMessage().getHeaders().get("simpConnectMessage"));
+        try {
+            String username = (String) headerAccessor.getSessionAttributes().get("username");
+            if (username == null) {
+                throw new UnauthorizedException(ErrorType.NO_AUTHORIZATION_ERROR, "세션에 username 이 비어있습니다.");
+            }
+            Long roomId = (Long) headerAccessor.getSessionAttributes().get("roomId");
 
-        StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
-        String sessionId = headerAccessor.getSessionId();
-        sessionMap.values().forEach(sessions -> sessions.remove(sessionId));
-
-        log.info("[ {} ][ 세션 연결 종료 ]", sessionId);
-        simpMessageSendingOperations.convertAndSend("/sub/user-list", sessionMap);
-    }
-
-    public int getTotalSubscriberCount() {
-        return totalSubscribers.get();
-    }
-
-    private void notifyTotalSubscriberCountChanged() {
-        int count = getTotalSubscriberCount();
-        simpMessageSendingOperations.convertAndSend("/sub/user-count", count);
-    }
-
-    public void broadcastMessage(Long roomId, ChatMessage chatMessage) {
-        simpMessageSendingOperations.convertAndSend("/sub/room" + roomId, chatMessage);
+            log.info("User Disconnected: {}", username);
+            ChatMessage chatMessage = ChatMessage.builder()
+                    .type(MessageType.LEAVE)
+                    .roomId(String.valueOf(roomId))
+                    .sender(username)
+                    .content(username + " 님의 연결이 종료되었습니다.")
+                    .build();
+            messagingTemplate.convertAndSend("/topic/public", chatMessage);
+        } catch (Exception e) {
+            throw new InternalServerException(ErrorType.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
     }
 }
