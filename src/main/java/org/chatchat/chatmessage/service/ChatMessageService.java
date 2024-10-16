@@ -8,7 +8,6 @@ import org.chatchat.chatmessage.dto.MessageRequest;
 import org.chatchat.chatroom.domain.Room;
 import org.chatchat.chatroom.dto.request.JoinRoomRequest;
 import org.chatchat.chatroom.service.RoomQueryService;
-import org.chatchat.user.domain.User;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -20,28 +19,28 @@ public class ChatMessageService {
     private final ChatMessageRepository chatMessageRepository;
     private final RoomQueryService roomQueryService;
 
-    public ChatMessage saveMessage(MessageRequest messageRequest, MessageType type, User user) {
+    public ChatMessage saveMessage(MessageRequest messageRequest, MessageType type, String username) {
         Room room = roomQueryService.findExistingRoomById(messageRequest.roomId());
         String content = messageRequest.message();
 
         ChatMessage chatMessage = ChatMessage.builder()
                 .type(type)
                 .roomId(String.valueOf(room.getId()))
-                .sender(String.valueOf(user.getUsername()))
+                .sender(username)
                 .content(content)
                 .sentAt(Instant.now())
                 .build();
         return chatMessageRepository.save(chatMessage);
     }
 
-    public ChatMessage joinMessage(JoinRoomRequest joinRoomRequest, MessageType type, User user) {
+    public ChatMessage joinMessage(JoinRoomRequest joinRoomRequest, MessageType type, String username) {
         Room room = roomQueryService.findExistingRoomById(joinRoomRequest.roomId());
 
         ChatMessage chatMessage = ChatMessage.builder()
                 .type(type)
                 .roomId(String.valueOf(room.getId()))
-                .sender(String.valueOf(user.getUsername()))
-                .content(user.getUsername() + "님이 입장하였습니다.")
+                .sender(username)
+                .content(username + "님이 입장하였습니다.")
                 .sentAt(Instant.now())
                 .build();
         return chatMessageRepository.save(chatMessage);
