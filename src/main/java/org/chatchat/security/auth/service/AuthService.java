@@ -5,7 +5,7 @@ import org.chatchat.common.exception.UnauthorizedException;
 import org.chatchat.security.auth.dto.request.LoginRequest;
 import org.chatchat.security.auth.dto.request.SignupRequest;
 import org.chatchat.security.auth.dto.response.LoginResponse;
-import org.chatchat.security.jwt.JwtProvider;
+import org.chatchat.security.jwt.provider.JwtProvider;
 import org.chatchat.user.domain.User;
 import org.chatchat.user.service.UserQueryService;
 import org.chatchat.user.service.UserService;

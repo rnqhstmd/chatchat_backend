@@ -8,7 +8,7 @@ import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.chatchat.common.exception.ApiException;
 import org.chatchat.common.exception.InternalServerException;
-import org.chatchat.security.jwt.JwtProvider;
+import org.chatchat.security.jwt.provider.JwtProvider;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
