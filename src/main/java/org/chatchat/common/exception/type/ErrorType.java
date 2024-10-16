@@ -16,6 +16,9 @@ public enum ErrorType {
     TOKEN_UNSUPPORTED_ERROR("TOKEN_40104", "지원하지 않는 토큰입니다."),
     TOKEN_UNKNOWN_ERROR("TOKEN_40105", "알 수 없는 토큰입니다."),
 
+    // Cookie
+    COOKIE_NOT_FOUND_ERROR("COOKIE_40100", "쿠키가 존재하지 않습니다."),
+
     // Auth
     NO_AUTHORIZATION_ERROR("AUTH_40100", "인증이 없는 사용자입니다."),
     ACCESS_DENIED_ERROR("AUTH_40300", "접근 권한이 없습니다."),
