@@ -11,6 +11,7 @@ import org.chatchat.chatroom.service.RoomQueryService;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -28,7 +29,7 @@ public class ChatMessageService {
                 .roomId(String.valueOf(room.getId()))
                 .sender(username)
                 .content(content)
-                .sentAt(Instant.now())
+                .sentAt(LocalDateTime.now())
                 .build();
         return chatMessageRepository.save(chatMessage);
     }
@@ -41,7 +42,7 @@ public class ChatMessageService {
                 .roomId(String.valueOf(room.getId()))
                 .sender(username)
                 .content(username + "님이 입장하였습니다.")
-                .sentAt(Instant.now())
+                .sentAt(LocalDateTime.now())
                 .build();
         return chatMessageRepository.save(chatMessage);
     }

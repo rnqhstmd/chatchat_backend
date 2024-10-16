@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Getter
 @Builder
@@ -18,5 +18,5 @@ public class ChatMessage {
     private String roomId;
     private String sender;
     private String content;
-    private Instant sentAt;
+    private LocalDateTime sentAt;
 }
