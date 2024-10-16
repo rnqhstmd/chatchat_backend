@@ -6,8 +6,8 @@ import org.chatchat.chatmessage.domain.MessageType;
 import org.chatchat.chatmessage.dto.MessageRequest;
 import org.chatchat.chatmessage.service.ChatMessageService;
 import org.chatchat.chatroom.dto.request.JoinRoomRequest;
-import org.chatchat.security.auth.annotation.AuthUser;
-import org.chatchat.user.domain.User;
+import org.chatchat.common.exception.UnauthorizedException;
+import org.chatchat.common.exception.type.ErrorType;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
@@ -22,20 +22,25 @@ public class ChatMessageController {
     private final SimpMessageSendingOperations messagingTemplate;
 
     @MessageMapping("/chat.sendMessage")
-    public void sendMessage(@Payload MessageRequest messageRequest, @AuthUser User user) {
-        ChatMessage chatMessage = chatMessageService.saveMessage(messageRequest, MessageType.TALK, user);
+    public void sendMessage(@Payload MessageRequest messageRequest, SimpMessageHeaderAccessor headerAccessor) {
+        String username = extractUsername(headerAccessor);
+        ChatMessage chatMessage = chatMessageService.saveMessage(messageRequest, MessageType.TALK, username);
         messagingTemplate.convertAndSend("/topic/room." + messageRequest.roomId(), chatMessage);
     }
 
     @MessageMapping("/chat.joinRoom")
     public void addUser(@Payload JoinRoomRequest joinRoomRequest,
-                               SimpMessageHeaderAccessor headerAccessor,
-                               @AuthUser User user) {
-        // 세션에 방 ID와 사용자 정보 저장
-        headerAccessor.getSessionAttributes().put("roomId", joinRoomRequest.roomId());
-        headerAccessor.getSessionAttributes().put("username", user.getUsername());
-
-        ChatMessage joinMessage = chatMessageService.joinMessage(joinRoomRequest, MessageType.ENTER, user);
+                        SimpMessageHeaderAccessor headerAccessor) {
+        String username = extractUsername(headerAccessor);
+        ChatMessage joinMessage = chatMessageService.joinMessage(joinRoomRequest, MessageType.ENTER, username);
         messagingTemplate.convertAndSend("/topic/room." + joinRoomRequest.roomId(), joinMessage);
+    }
+
+    private String extractUsername(SimpMessageHeaderAccessor headerAccessor) {
+        Object usernameObject = headerAccessor.getSessionAttributes().get("username");
+        if (usernameObject == null) {
+            throw new UnauthorizedException(ErrorType.NO_AUTHORIZATION_ERROR);
+        }
+        return (String) usernameObject;
     }
 }
