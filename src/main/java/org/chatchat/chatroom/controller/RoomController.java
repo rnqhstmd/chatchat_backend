@@ -50,7 +50,15 @@ public class RoomController {
     @PostMapping("/{roomId}/invite")
     public ResponseEntity<Void> inviteUserToRoom(@PathVariable Long roomId,
                                                  @RequestBody @Valid InviteUserToRoomRequest inviteRequest) {
-        roomService.inviteUserToRoom(roomId, inviteRequest);
+        roomService.inviteUserToRoom(roomId, inviteRequest.username());
+        return ResponseEntity.ok().build();
+    }
+
+    // 채팅방 나가기
+    @DeleteMapping("/{roomId}/leave")
+    public ResponseEntity<Void> leaveRoom(@PathVariable Long roomId,
+                                          @AuthUser User user) {
+        roomService.leaveRoom(roomId, user.getId());
         return ResponseEntity.ok().build();
     }
 }
