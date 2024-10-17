@@ -4,13 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.chatchat.chatmessage.domain.ChatMessage;
 import org.chatchat.chatmessage.domain.MessageType;
 import org.chatchat.chatmessage.domain.repository.ChatMessageRepository;
-import org.chatchat.chatmessage.dto.MessageRequest;
+import org.chatchat.chatmessage.dto.request.MessageRequest;
 import org.chatchat.chatroom.domain.Room;
 import org.chatchat.chatroom.dto.request.JoinRoomRequest;
 import org.chatchat.chatroom.service.RoomQueryService;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
 
 @Service

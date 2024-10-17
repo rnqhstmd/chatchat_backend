@@ -3,7 +3,7 @@ package org.chatchat.chatmessage.controller;
 import lombok.RequiredArgsConstructor;
 import org.chatchat.chatmessage.domain.ChatMessage;
 import org.chatchat.chatmessage.domain.MessageType;
-import org.chatchat.chatmessage.dto.MessageRequest;
+import org.chatchat.chatmessage.dto.request.MessageRequest;
 import org.chatchat.chatmessage.service.ChatMessageService;
 import org.chatchat.chatroom.dto.request.JoinRoomRequest;
 import org.chatchat.common.exception.UnauthorizedException;
