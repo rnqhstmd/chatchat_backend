@@ -38,13 +38,22 @@ public class RoomService {
     /**
      * 채팅방 초대
      */
-    public void inviteUserToRoom(Long roomId, InviteUserToRoomRequest inviteUserToRoomRequest) {
+    public void inviteUserToRoom(Long roomId, String username) {
         Room room = roomQueryService.findExistingRoomById(roomId);
-        User inviteUser = userQueryService.findExistingUserByName(inviteUserToRoomRequest.username());
+        // 초대할 유저
+        User inviteUser = userQueryService.findExistingUserByName(username);
         // 이미 채팅방에 참여 중인 유저 검증
         chatPartQueryService.isUserMemberOfRoom(roomId, inviteUser.getId());
 
         ChatPart chatPart = new ChatPart(room, inviteUser);
         chatPartService.saveChatPart(chatPart);
+    }
+
+    /**
+     * 채팅방 나가기
+     */
+    public void leaveRoom(Long roomId, Long userId) {
+        ChatPart chatPart = chatPartQueryService.findExistingChatPartByRoomIdAndUserId(roomId, userId);
+        chatPartService.removeChatPart(chatPart);
     }
 }
