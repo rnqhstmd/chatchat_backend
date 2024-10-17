@@ -7,13 +7,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class ChatPartService {
 
     private final ChatPartRepository chatPartRepository;
 
-    @Transactional
     public void saveChatPart(final ChatPart chatPart) {
         chatPartRepository.save(chatPart);
+    }
+
+    public void removeChatPart(final ChatPart chatPart) {
+        chatPartRepository.delete(chatPart);
     }
 }
