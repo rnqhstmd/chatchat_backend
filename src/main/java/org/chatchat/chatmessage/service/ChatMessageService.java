@@ -7,7 +7,7 @@ import org.chatchat.chatmessage.domain.repository.ChatMessageRepository;
 import org.chatchat.chatmessage.dto.request.MessageRequest;
 import org.chatchat.chatmessage.dto.response.MessageResponse;
 import org.chatchat.chatroom.domain.Room;
-import org.chatchat.chatroom.dto.request.JoinRoomRequest;
+import org.chatchat.chatroom.dto.request.InviteUserToRoomRequest;
 import org.chatchat.chatroom.service.RoomQueryService;
 import org.springframework.stereotype.Service;
 
@@ -23,12 +23,12 @@ public class ChatMessageService {
     /**
      * 채팅 메세지 저장
      */
-    public MessageResponse saveMessage(MessageRequest messageRequest, MessageType type, String username) {
+    public MessageResponse saveMessage(MessageRequest messageRequest, String username) {
         Room room = roomQueryService.findExistingRoomById(messageRequest.roomId());
         String content = messageRequest.message();
 
         ChatMessage chatMessage = ChatMessage.builder()
-                .type(type)
+                .type(MessageType.TALK)
                 .roomId(String.valueOf(room.getId()))
                 .sender(username)
                 .content(content)
@@ -40,16 +40,17 @@ public class ChatMessageService {
     }
 
     /**
-     * 채팅 참가 메세지 저장
+     * 초대 메세지 저장
      */
-    public MessageResponse joinMessage(JoinRoomRequest joinRoomRequest, MessageType type, String username) {
-        Room room = roomQueryService.findExistingRoomById(joinRoomRequest.roomId());
+    public MessageResponse sendSystemMessage(InviteUserToRoomRequest inviteUserToRoomRequest, String username) {
+        Room room = roomQueryService.findExistingRoomById(inviteUserToRoomRequest.roomId());
+        String content = username + "님이 " + inviteUserToRoomRequest.username() + "님을 초대했습니다.";
 
         ChatMessage chatMessage = ChatMessage.builder()
-                .type(type)
+                .type(MessageType.SYSTEM)
                 .roomId(String.valueOf(room.getId()))
-                .sender(username)
-                .content(username + "님이 입장하였습니다.")
+                .sender("시스템")
+                .content(content)
                 .sentAt(LocalDateTime.now())
                 .build();
         ChatMessage saveMessage = chatMessageRepository.save(chatMessage);
