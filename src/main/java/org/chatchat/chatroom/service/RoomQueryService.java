@@ -10,8 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static org.chatchat.common.exception.type.ErrorType.DUPLICATED_ROOM_NAME_ERROR;
-import static org.chatchat.common.exception.type.ErrorType.ROOM_NOT_FOUND_ERROR;
+import static org.chatchat.common.exception.type.ErrorType.*;
 
 @Service
 @RequiredArgsConstructor
