@@ -1,9 +1,9 @@
 package org.chatchat.chatmessage.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.chatchat.chatmessage.domain.ChatMessage;
 import org.chatchat.chatmessage.domain.MessageType;
-import org.chatchat.chatmessage.dto.MessageRequest;
+import org.chatchat.chatmessage.dto.request.MessageRequest;
+import org.chatchat.chatmessage.dto.response.MessageResponse;
 import org.chatchat.chatmessage.service.ChatMessageService;
 import org.chatchat.chatroom.dto.request.JoinRoomRequest;
 import org.chatchat.common.exception.UnauthorizedException;
@@ -24,16 +24,16 @@ public class ChatMessageController {
     @MessageMapping("/chat.sendMessage")
     public void sendMessage(@Payload MessageRequest messageRequest, SimpMessageHeaderAccessor headerAccessor) {
         String username = extractUsername(headerAccessor);
-        ChatMessage chatMessage = chatMessageService.saveMessage(messageRequest, MessageType.TALK, username);
-        messagingTemplate.convertAndSend("/topic/room." + messageRequest.roomId(), chatMessage);
+        MessageResponse messageResponse = chatMessageService.saveMessage(messageRequest, MessageType.TALK, username);
+        messagingTemplate.convertAndSend("/topic/room." + messageRequest.roomId(), messageResponse);
     }
 
     @MessageMapping("/chat.joinRoom")
     public void addUser(@Payload JoinRoomRequest joinRoomRequest,
                         SimpMessageHeaderAccessor headerAccessor) {
         String username = extractUsername(headerAccessor);
-        ChatMessage joinMessage = chatMessageService.joinMessage(joinRoomRequest, MessageType.ENTER, username);
-        messagingTemplate.convertAndSend("/topic/room." + joinRoomRequest.roomId(), joinMessage);
+        MessageResponse messageResponse = chatMessageService.joinMessage(joinRoomRequest, MessageType.ENTER, username);
+        messagingTemplate.convertAndSend("/topic/room." + joinRoomRequest.roomId(), messageResponse);
     }
 
     private String extractUsername(SimpMessageHeaderAccessor headerAccessor) {

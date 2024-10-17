@@ -32,6 +32,7 @@ public enum ErrorType {
     // Room
     ROOM_NOT_FOUND_ERROR("ROOM_40400", "채팅방을 찾을 수 없습니다."),
     DUPLICATED_ROOM_NAME_ERROR("ROOM_40900", "이미 사용 중인 채팅방 이름입니다."),
+    ALREADY_JOINED_USER_ERROR("ROOM_40901", "이미 참가한 채팅방입니다."),
 
     // Resource
     NO_RESOURCE_ERROR( "RESOURCE_40000", "해당 리소스를 찾을 수 없습니다."),

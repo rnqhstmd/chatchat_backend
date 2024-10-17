@@ -1,4 +1,4 @@
-package org.chatchat.chatmessage.dto;
+package org.chatchat.chatmessage.dto.request;
 
 public record MessageRequest(
         Long roomId,
