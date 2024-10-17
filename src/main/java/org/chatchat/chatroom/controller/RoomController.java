@@ -14,7 +14,6 @@ import org.chatchat.user.domain.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/rooms")
@@ -32,8 +31,8 @@ public class RoomController {
     }
 
     @GetMapping
-    public ResponseEntity<List<RoomInfoResponse>> getAllRooms() {
-        List<RoomInfoResponse> rooms = roomQueryService.getAllRooms();
+    public ResponseEntity<PageResponseDto<RoomInfoResponse>> getAllRooms(@RequestParam(defaultValue = "0") int page) {
+        PageResponseDto<RoomInfoResponse> rooms = roomQueryService.getAllRooms(page);
         return ResponseEntity.ok(rooms);
     }
 
