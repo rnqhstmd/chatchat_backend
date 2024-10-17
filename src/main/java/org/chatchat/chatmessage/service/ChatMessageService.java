@@ -5,6 +5,7 @@ import org.chatchat.chatmessage.domain.ChatMessage;
 import org.chatchat.chatmessage.domain.MessageType;
 import org.chatchat.chatmessage.domain.repository.ChatMessageRepository;
 import org.chatchat.chatmessage.dto.request.MessageRequest;
+import org.chatchat.chatmessage.dto.response.MessageResponse;
 import org.chatchat.chatroom.domain.Room;
 import org.chatchat.chatroom.dto.request.JoinRoomRequest;
 import org.chatchat.chatroom.service.RoomQueryService;
@@ -19,7 +20,10 @@ public class ChatMessageService {
     private final ChatMessageRepository chatMessageRepository;
     private final RoomQueryService roomQueryService;
 
-    public ChatMessage saveMessage(MessageRequest messageRequest, MessageType type, String username) {
+    /**
+     * 채팅 메세지 저장
+     */
+    public MessageResponse saveMessage(MessageRequest messageRequest, MessageType type, String username) {
         Room room = roomQueryService.findExistingRoomById(messageRequest.roomId());
         String content = messageRequest.message();
 
@@ -30,10 +34,15 @@ public class ChatMessageService {
                 .content(content)
                 .sentAt(LocalDateTime.now())
                 .build();
-        return chatMessageRepository.save(chatMessage);
+        ChatMessage saveMessage = chatMessageRepository.save(chatMessage);
+
+        return MessageResponse.from(saveMessage);
     }
 
-    public ChatMessage joinMessage(JoinRoomRequest joinRoomRequest, MessageType type, String username) {
+    /**
+     * 채팅 참가 메세지 저장
+     */
+    public MessageResponse joinMessage(JoinRoomRequest joinRoomRequest, MessageType type, String username) {
         Room room = roomQueryService.findExistingRoomById(joinRoomRequest.roomId());
 
         ChatMessage chatMessage = ChatMessage.builder()
@@ -43,6 +52,8 @@ public class ChatMessageService {
                 .content(username + "님이 입장하였습니다.")
                 .sentAt(LocalDateTime.now())
                 .build();
-        return chatMessageRepository.save(chatMessage);
+        ChatMessage saveMessage = chatMessageRepository.save(chatMessage);
+
+        return MessageResponse.from(saveMessage);
     }
 }
