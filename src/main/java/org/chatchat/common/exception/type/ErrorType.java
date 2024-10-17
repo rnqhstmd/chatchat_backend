@@ -39,6 +39,9 @@ public enum ErrorType {
 
     // HTTP
     METHOD_NOT_ALLOWED_ERROR( "HTTP_40500", "잘못된 HTTP 메서드입니다."),
+    INVALID_REQUEST_PARAMETER_ERROR("HTTP_40000", "요청 파라미터가 잘못되었습니다."),
+    MISSING_REQUEST_PARAMETER_ERROR("HTTP_40001", "필수 요청 파라미터가 누락되었습니다."),
+    INVALID_REQUEST_FORMAT_ERROR("HTTP_40002", "요청에 필요한 데이터가 잘못되었습니다."),
 
     // Internal Server
     INTERNAL_SERVER_ERROR("INTERNAL_50000", "서버 내부 에러입니다."),
