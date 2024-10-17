@@ -8,6 +8,7 @@ import org.chatchat.chatmessage.dto.request.MessageRequest;
 import org.chatchat.chatmessage.dto.response.MessageResponse;
 import org.chatchat.chatroom.domain.Room;
 import org.chatchat.chatroom.dto.request.InviteUserToRoomRequest;
+import org.chatchat.chatroom.dto.request.LeaveRoomRequest;
 import org.chatchat.chatroom.service.RoomQueryService;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +24,7 @@ public class ChatMessageService {
     /**
      * 채팅 메세지 저장
      */
-    public MessageResponse saveMessage(MessageRequest messageRequest, String username) {
+    public MessageResponse saveTalkMessage(MessageRequest messageRequest, String username) {
         Room room = roomQueryService.findExistingRoomById(messageRequest.roomId());
         String content = messageRequest.message();
 
@@ -42,9 +43,28 @@ public class ChatMessageService {
     /**
      * 초대 메세지 저장
      */
-    public MessageResponse sendSystemMessage(InviteUserToRoomRequest inviteUserToRoomRequest, String username) {
+    public MessageResponse saveInviteMessage(InviteUserToRoomRequest inviteUserToRoomRequest, String username) {
         Room room = roomQueryService.findExistingRoomById(inviteUserToRoomRequest.roomId());
         String content = username + "님이 " + inviteUserToRoomRequest.username() + "님을 초대했습니다.";
+
+        ChatMessage chatMessage = ChatMessage.builder()
+                .type(MessageType.SYSTEM)
+                .roomId(String.valueOf(room.getId()))
+                .sender("시스템")
+                .content(content)
+                .sentAt(LocalDateTime.now())
+                .build();
+        ChatMessage saveMessage = chatMessageRepository.save(chatMessage);
+
+        return MessageResponse.from(saveMessage);
+    }
+
+    /**
+     * 나가기 메세지 저장
+     */
+    public MessageResponse saveLeaveMessage(LeaveRoomRequest leaveRoomRequest, String username) {
+        Room room = roomQueryService.findExistingRoomById(leaveRoomRequest.roomId());
+        String content = username + "님이 나갔습니다.";
 
         ChatMessage chatMessage = ChatMessage.builder()
                 .type(MessageType.SYSTEM)
