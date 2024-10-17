@@ -5,6 +5,7 @@ import org.chatchat.chatmessage.dto.request.MessageRequest;
 import org.chatchat.chatmessage.dto.response.MessageResponse;
 import org.chatchat.chatmessage.service.ChatMessageService;
 import org.chatchat.chatroom.dto.request.InviteUserToRoomRequest;
+import org.chatchat.chatroom.dto.request.LeaveRoomRequest;
 import org.chatchat.common.exception.UnauthorizedException;
 import org.chatchat.common.exception.type.ErrorType;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -21,17 +22,24 @@ public class ChatMessageController {
     private final SimpMessageSendingOperations messagingTemplate;
 
     @MessageMapping("/chat.sendMessage")
-    public void sendMessage(@Payload MessageRequest messageRequest, SimpMessageHeaderAccessor headerAccessor) {
+    public void sendTalkMessage(@Payload MessageRequest messageRequest, SimpMessageHeaderAccessor headerAccessor) {
         String username = extractUsername(headerAccessor);
-        MessageResponse messageResponse = chatMessageService.saveMessage(messageRequest, username);
+        MessageResponse messageResponse = chatMessageService.saveTalkMessage(messageRequest, username);
         messagingTemplate.convertAndSend("/topic/room." + messageRequest.roomId(), messageResponse);
     }
 
     @MessageMapping("/chat.sendInviteMessage")
     public void sendInviteMessage(@Payload InviteUserToRoomRequest inviteUserToRoomRequest, SimpMessageHeaderAccessor headerAccessor) {
         String username = extractUsername(headerAccessor);
-        MessageResponse messageResponse = chatMessageService.sendSystemMessage(inviteUserToRoomRequest, username);
+        MessageResponse messageResponse = chatMessageService.saveInviteMessage(inviteUserToRoomRequest, username);
         messagingTemplate.convertAndSend("/topic/room." + inviteUserToRoomRequest.roomId(), messageResponse);
+    }
+
+    @MessageMapping("/chat.sendLeaveMessage")
+    public void sendLeaveMessage(@Payload LeaveRoomRequest leaveRoomRequest, SimpMessageHeaderAccessor headerAccessor) {
+        String username = extractUsername(headerAccessor);
+        MessageResponse messageResponse = chatMessageService.saveLeaveMessage(leaveRoomRequest, username);
+        messagingTemplate.convertAndSend("/topic/room." + leaveRoomRequest.roomId(), messageResponse);
     }
 
     private String extractUsername(SimpMessageHeaderAccessor headerAccessor) {
