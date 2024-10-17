@@ -33,11 +33,7 @@ public class RoomService {
 
     public void joinRoom(Long roomId, User user) {
         Room room = roomQueryService.findExistingRoomById(roomId);
-
-        // 이미 채팅방에 참가했는지 확인
-        if (chatPartQueryService.validateUserRoomMember(roomId, user.getId())) {
-            throw new ConflictException(ALREADY_JOINED_USER_ERROR);
-        }
+        chatPartQueryService.validateUserRoomMember(roomId, user.getId());
 
         // 유저가 채팅방에 참여하도록 ChatPart 생성
         ChatPart chatPart = new ChatPart(room, user);
