@@ -24,7 +24,7 @@ public class ChatMessageQueryService {
      * 이전 메세지 불러오기
      */
     public PageResponseDto<MessageResponse> loadMessagesByRoomId(Long roomId, Long userId, int page) {
-        chatPartQueryService.validateUserRoomMember(roomId, userId);
+        chatPartQueryService.isUserMemberOfRoom(roomId, userId);
 
         PageRequestDto pageRequestDto = new PageRequestDto(page);
         Pageable pageable = pageRequestDto.toMessagePageable();
