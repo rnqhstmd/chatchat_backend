@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.chatchat.chatmessage.dto.response.MessageResponse;
 import org.chatchat.chatmessage.service.ChatMessageQueryService;
 import org.chatchat.chatroom.dto.request.CreateRoomRequest;
+import org.chatchat.chatroom.dto.request.InviteUserToRoomRequest;
 import org.chatchat.chatroom.dto.response.RoomInfoResponse;
 import org.chatchat.chatroom.service.RoomQueryService;
 import org.chatchat.chatroom.service.RoomService;
@@ -36,14 +37,6 @@ public class RoomController {
         return ResponseEntity.ok(rooms);
     }
 
-    // 채팅방 참가
-    @PostMapping("/{roomId}/join")
-    public ResponseEntity<Void> joinRoom(@PathVariable("roomId") Long roomId,
-                                         @AuthUser User user) {
-        roomService.joinRoom(roomId, user);
-        return ResponseEntity.ok().build();
-    }
-
     // 채팅방 입장 및 이전 메시지 불러오기
     @GetMapping("/{roomId}/enter")
     public ResponseEntity<PageResponseDto<MessageResponse>> enterRoom(@PathVariable("roomId") Long roomId,
@@ -51,5 +44,13 @@ public class RoomController {
                                                                       @AuthUser User user) {
         PageResponseDto<MessageResponse> messages = chatMessageQueryService.loadMessagesByRoomId(roomId, user.getId(), page);
         return ResponseEntity.ok(messages);
+    }
+
+    // 채팅방 초대
+    @PostMapping("/{roomId}/invite")
+    public ResponseEntity<Void> inviteUserToRoom(@PathVariable Long roomId,
+                                                 @RequestBody @Valid InviteUserToRoomRequest inviteRequest) {
+        roomService.inviteUserToRoom(roomId, inviteRequest);
+        return ResponseEntity.ok().build();
     }
 }
