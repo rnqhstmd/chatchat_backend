@@ -20,7 +20,7 @@ public class ChatPartQueryService {
         }
     }
 
-    public ChatPart findExistingChatPartByRoomIdAndUserId(Long roomId, Long userId) {
+    public ChatPart findExistingChatPart(Long roomId, Long userId) {
         return chatPartRepository.findByRoomIdAndUserId(roomId, userId)
                 .orElseThrow(() -> new ForbiddenException(NOT_ROOM_MEMBER_ERROR));
     }
