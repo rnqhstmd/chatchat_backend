@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.chatchat.chatmessage.domain.ChatMessage;
 import org.chatchat.chatmessage.domain.repository.ChatMessageRepository;
 import org.chatchat.chatmessage.dto.response.MessageResponse;
-import org.chatchat.chatpart.service.ChatPartQueryService;
+import org.chatchat.roomuser.service.RoomUserQueryService;
 import org.chatchat.common.page.dto.request.PageRequestDto;
 import org.chatchat.common.page.dto.response.PageResponseDto;
 import org.springframework.data.domain.Page;
@@ -18,13 +18,13 @@ import java.util.List;
 public class ChatMessageQueryService {
 
     private final ChatMessageRepository chatMessageRepository;
-    private final ChatPartQueryService chatPartQueryService;
+    private final RoomUserQueryService roomUserQueryService;
 
     /**
      * 이전 메세지 불러오기
      */
     public PageResponseDto<MessageResponse> loadMessagesByRoomId(Long roomId, Long userId, int page) {
-        chatPartQueryService.isUserMemberOfRoom(roomId, userId);
+        roomUserQueryService.isUserMemberOfRoom(roomId, userId);
 
         PageRequestDto pageRequestDto = new PageRequestDto(page);
         Pageable pageable = pageRequestDto.toMessagePageable();

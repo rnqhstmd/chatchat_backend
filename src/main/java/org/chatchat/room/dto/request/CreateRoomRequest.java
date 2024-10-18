@@ -1,4 +1,4 @@
-package org.chatchat.chatroom.dto.request;
+package org.chatchat.room.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 

@@ -8,7 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.chatchat.chatpart.domain.ChatPart;
+import org.chatchat.roomuser.domain.RoomUser;
 import org.chatchat.common.entity.BaseEntity;
 
 import java.util.List;
@@ -31,7 +31,7 @@ public class User extends BaseEntity {
     private String password;
 
     @OneToMany(mappedBy = "user")
-    private List<ChatPart> chatParts;
+    private List<RoomUser> roomUsers;
 
     public User(String email, String username, String password) {
         this.email = email;

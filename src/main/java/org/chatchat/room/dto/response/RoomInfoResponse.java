@@ -1,4 +1,4 @@
-package org.chatchat.chatroom.dto.response;
+package org.chatchat.room.dto.response;
 
 public record RoomInfoResponse(
         Long roomId,

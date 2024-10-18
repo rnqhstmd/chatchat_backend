@@ -1,9 +1,9 @@
-package org.chatchat.chatroom.service;
+package org.chatchat.room.service;
 
 import lombok.RequiredArgsConstructor;
-import org.chatchat.chatroom.domain.Room;
-import org.chatchat.chatroom.domain.repository.RoomRepository;
-import org.chatchat.chatroom.dto.response.RoomInfoResponse;
+import org.chatchat.room.domain.Room;
+import org.chatchat.room.domain.repository.RoomRepository;
+import org.chatchat.room.dto.response.RoomInfoResponse;
 import org.chatchat.common.exception.ConflictException;
 import org.chatchat.common.exception.NotFoundException;
 import org.chatchat.common.page.dto.request.PageRequestDto;

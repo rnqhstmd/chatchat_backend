@@ -6,10 +6,10 @@ import org.chatchat.chatmessage.domain.MessageType;
 import org.chatchat.chatmessage.domain.repository.ChatMessageRepository;
 import org.chatchat.chatmessage.dto.request.MessageRequest;
 import org.chatchat.chatmessage.dto.response.MessageResponse;
-import org.chatchat.chatroom.domain.Room;
-import org.chatchat.chatroom.dto.request.InviteUserToRoomRequest;
-import org.chatchat.chatroom.dto.request.LeaveRoomRequest;
-import org.chatchat.chatroom.service.RoomQueryService;
+import org.chatchat.room.domain.Room;
+import org.chatchat.room.dto.request.InviteUserToRoomRequest;
+import org.chatchat.room.dto.request.LeaveRoomRequest;
+import org.chatchat.room.service.RoomQueryService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;

@@ -1,14 +1,14 @@
-package org.chatchat.chatroom.controller;
+package org.chatchat.room.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.chatchat.chatmessage.dto.response.MessageResponse;
 import org.chatchat.chatmessage.service.ChatMessageQueryService;
-import org.chatchat.chatroom.dto.request.CreateRoomRequest;
-import org.chatchat.chatroom.dto.request.InviteUserToRoomRequest;
-import org.chatchat.chatroom.dto.response.RoomInfoResponse;
-import org.chatchat.chatroom.service.RoomQueryService;
-import org.chatchat.chatroom.service.RoomService;
+import org.chatchat.room.dto.request.CreateRoomRequest;
+import org.chatchat.room.dto.request.InviteUserToRoomRequest;
+import org.chatchat.room.dto.response.RoomInfoResponse;
+import org.chatchat.room.service.RoomQueryService;
+import org.chatchat.room.service.RoomService;
 import org.chatchat.common.page.dto.response.PageResponseDto;
 import org.chatchat.security.auth.annotation.AuthUser;
 import org.chatchat.user.domain.User;

@@ -1,8 +1,8 @@
-package org.chatchat.chatpart.service;
+package org.chatchat.roomuser.service;
 
 import lombok.RequiredArgsConstructor;
-import org.chatchat.chatpart.domain.ChatPart;
-import org.chatchat.chatpart.domain.repository.ChatPartRepository;
+import org.chatchat.roomuser.domain.RoomUser;
+import org.chatchat.roomuser.domain.repository.RoomUserRepository;
 import org.chatchat.common.exception.ForbiddenException;
 import org.springframework.stereotype.Service;
 
@@ -10,18 +10,18 @@ import static org.chatchat.common.exception.type.ErrorType.NOT_ROOM_MEMBER_ERROR
 
 @Service
 @RequiredArgsConstructor
-public class ChatPartQueryService {
+public class RoomUserQueryService {
 
-    private final ChatPartRepository chatPartRepository;
+    private final RoomUserRepository roomUserRepository;
 
     public void isUserMemberOfRoom(Long roomId, Long userId) {
-        if (!chatPartRepository.existsByRoomIdAndUserId(roomId, userId)) {
+        if (!roomUserRepository.existsByRoomIdAndUserId(roomId, userId)) {
             throw new ForbiddenException(NOT_ROOM_MEMBER_ERROR);
         }
     }
 
-    public ChatPart findExistingChatPart(Long roomId, Long userId) {
-        return chatPartRepository.findByRoomIdAndUserId(roomId, userId)
+    public RoomUser findExistingChatPart(Long roomId, Long userId) {
+        return roomUserRepository.findByRoomIdAndUserId(roomId, userId)
                 .orElseThrow(() -> new ForbiddenException(NOT_ROOM_MEMBER_ERROR));
     }
 }

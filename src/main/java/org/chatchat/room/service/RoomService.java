@@ -1,12 +1,12 @@
-package org.chatchat.chatroom.service;
+package org.chatchat.room.service;
 
 import lombok.RequiredArgsConstructor;
-import org.chatchat.chatpart.domain.ChatPart;
-import org.chatchat.chatpart.service.ChatPartQueryService;
-import org.chatchat.chatpart.service.ChatPartService;
-import org.chatchat.chatroom.domain.Room;
-import org.chatchat.chatroom.domain.repository.RoomRepository;
-import org.chatchat.chatroom.dto.request.CreateRoomRequest;
+import org.chatchat.roomuser.domain.RoomUser;
+import org.chatchat.roomuser.service.RoomUserQueryService;
+import org.chatchat.roomuser.service.RoomUserService;
+import org.chatchat.room.domain.Room;
+import org.chatchat.room.domain.repository.RoomRepository;
+import org.chatchat.room.dto.request.CreateRoomRequest;
 import org.chatchat.user.domain.User;
 import org.chatchat.user.service.UserQueryService;
 import org.springframework.stereotype.Service;
@@ -20,8 +20,8 @@ public class RoomService {
 
     private final RoomRepository roomRepository;
     private final RoomQueryService roomQueryService;
-    private final ChatPartService chatPartService;
-    private final ChatPartQueryService chatPartQueryService;
+    private final RoomUserService roomUserService;
+    private final RoomUserQueryService roomUserQueryService;
     private final UserQueryService userQueryService;
 
     /**
@@ -35,8 +35,8 @@ public class RoomService {
         Room room = new Room(name);
         Room savedRoom = roomRepository.save(room);
 
-        ChatPart chatPart = new ChatPart(savedRoom, user, user.getId());
-        chatPartService.saveChatPart(chatPart);
+        RoomUser roomUser = new RoomUser(savedRoom, user, user.getId());
+        roomUserService.saveChatPart(roomUser);
     }
 
     /**
@@ -45,20 +45,20 @@ public class RoomService {
     public void inviteUserToRoom(Long roomId, Long userId, String username) {
         Room room = roomQueryService.findExistingRoomById(roomId);
         // 이미 채팅방에 참여 중인 유저 검증
-        chatPartQueryService.isUserMemberOfRoom(roomId, userId);
+        roomUserQueryService.isUserMemberOfRoom(roomId, userId);
 
         // 초대할 유저
         User inviteUser = userQueryService.findExistingUserByName(username);
 
-        ChatPart chatPart = new ChatPart(room, inviteUser, userId);
-        chatPartService.saveChatPart(chatPart);
+        RoomUser roomUser = new RoomUser(room, inviteUser, userId);
+        roomUserService.saveChatPart(roomUser);
     }
 
     /**
      * 채팅방 나가기
      */
     public void leaveRoom(Long roomId, Long userId) {
-        ChatPart chatPart = chatPartQueryService.findExistingChatPart(roomId, userId);
-        chatPartService.removeChatPart(chatPart);
+        RoomUser roomUser = roomUserQueryService.findExistingChatPart(roomId, userId);
+        roomUserService.removeChatPart(roomUser);
     }
 }

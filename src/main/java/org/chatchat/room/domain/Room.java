@@ -1,11 +1,11 @@
-package org.chatchat.chatroom.domain;
+package org.chatchat.room.domain;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.chatchat.chatpart.domain.ChatPart;
+import org.chatchat.roomuser.domain.RoomUser;
 import org.chatchat.common.entity.BaseEntity;
 
 import java.util.ArrayList;
@@ -23,7 +23,7 @@ public class Room extends BaseEntity {
     private String name;
 
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<ChatPart> users = new ArrayList<>();
+    private List<RoomUser> users = new ArrayList<>();
 
     public Room(String name) {
         this.name = name;
