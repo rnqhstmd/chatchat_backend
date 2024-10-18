@@ -69,5 +69,4 @@ public class WebSocketInterceptor extends HttpSessionHandshakeInterceptor {
         }
         return null;
     }
-
 }
