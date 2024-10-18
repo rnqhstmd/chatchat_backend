@@ -35,7 +35,7 @@ public class RoomService {
         Room room = new Room(name);
         Room savedRoom = roomRepository.save(room);
 
-        ChatPart chatPart = new ChatPart(savedRoom, user);
+        ChatPart chatPart = new ChatPart(savedRoom, user, user.getId());
         chatPartService.saveChatPart(chatPart);
     }
 
@@ -50,7 +50,7 @@ public class RoomService {
         // 초대할 유저
         User inviteUser = userQueryService.findExistingUserByName(username);
 
-        ChatPart chatPart = new ChatPart(room, inviteUser);
+        ChatPart chatPart = new ChatPart(room, inviteUser, userId);
         chatPartService.saveChatPart(chatPart);
     }
 
