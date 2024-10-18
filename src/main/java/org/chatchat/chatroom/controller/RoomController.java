@@ -37,7 +37,7 @@ public class RoomController {
         return ResponseEntity.ok(rooms);
     }
 
-    // 채팅방 입장 및 이전 메시지 불러오기
+    // 채팅방 입장
     @GetMapping("/{roomId}/enter")
     public ResponseEntity<PageResponseDto<MessageResponse>> enterRoom(@PathVariable("roomId") Long roomId,
                                                                       @RequestParam(defaultValue = "0") int page,
@@ -49,8 +49,9 @@ public class RoomController {
     // 채팅방 초대
     @PostMapping("/{roomId}/invite")
     public ResponseEntity<Void> inviteUserToRoom(@PathVariable Long roomId,
+                                                 @AuthUser User user,
                                                  @RequestBody @Valid InviteUserToRoomRequest inviteRequest) {
-        roomService.inviteUserToRoom(roomId, inviteRequest.username());
+        roomService.inviteUserToRoom(roomId, user.getId(), inviteRequest.username());
         return ResponseEntity.ok().build();
     }
 
