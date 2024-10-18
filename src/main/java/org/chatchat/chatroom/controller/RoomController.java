@@ -26,8 +26,9 @@ public class RoomController {
     private final ChatMessageQueryService chatMessageQueryService;
 
     @PostMapping
-    public ResponseEntity<Void> createRoom(@RequestBody @Valid CreateRoomRequest createRoomRequest) {
-        roomService.createChatRoom(createRoomRequest);
+    public ResponseEntity<Void> createRoom(@RequestBody @Valid CreateRoomRequest createRoomRequest,
+                                           @AuthUser User user) {
+        roomService.createChatRoom(createRoomRequest, user);
         return ResponseEntity.ok().build();
     }
 

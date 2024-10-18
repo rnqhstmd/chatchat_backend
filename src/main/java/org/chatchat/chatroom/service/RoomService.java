@@ -27,11 +27,16 @@ public class RoomService {
     /**
      * 채팅방 생성
      */
-    public void createChatRoom(CreateRoomRequest createRoomRequest) {
+    public void createChatRoom(CreateRoomRequest createRoomRequest, User user) {
         String name = createRoomRequest.name();
+        // 채팅방 이름 중복 검사
         roomQueryService.validateExistingRoomByName(name);
+
         Room room = new Room(name);
-        roomRepository.save(room);
+        Room savedRoom = roomRepository.save(room);
+
+        ChatPart chatPart = new ChatPart(savedRoom, user);
+        chatPartService.saveChatPart(chatPart);
     }
 
     /**
@@ -44,6 +49,7 @@ public class RoomService {
 
         // 초대할 유저
         User inviteUser = userQueryService.findExistingUserByName(username);
+
         ChatPart chatPart = new ChatPart(room, inviteUser);
         chatPartService.saveChatPart(chatPart);
     }
@@ -52,7 +58,7 @@ public class RoomService {
      * 채팅방 나가기
      */
     public void leaveRoom(Long roomId, Long userId) {
-        ChatPart chatPart = chatPartQueryService.findExistingChatPartByRoomIdAndUserId(roomId, userId);
+        ChatPart chatPart = chatPartQueryService.findExistingChatPart(roomId, userId);
         chatPartService.removeChatPart(chatPart);
     }
 }
