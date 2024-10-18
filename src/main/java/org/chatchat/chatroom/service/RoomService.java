@@ -7,7 +7,6 @@ import org.chatchat.chatpart.service.ChatPartService;
 import org.chatchat.chatroom.domain.Room;
 import org.chatchat.chatroom.domain.repository.RoomRepository;
 import org.chatchat.chatroom.dto.request.CreateRoomRequest;
-import org.chatchat.chatroom.dto.request.InviteUserToRoomRequest;
 import org.chatchat.user.domain.User;
 import org.chatchat.user.service.UserQueryService;
 import org.springframework.stereotype.Service;
@@ -38,13 +37,13 @@ public class RoomService {
     /**
      * 채팅방 초대
      */
-    public void inviteUserToRoom(Long roomId, String username) {
+    public void inviteUserToRoom(Long roomId, Long userId, String username) {
         Room room = roomQueryService.findExistingRoomById(roomId);
+        // 이미 채팅방에 참여 중인 유저 검증
+        chatPartQueryService.isUserMemberOfRoom(roomId, userId);
+
         // 초대할 유저
         User inviteUser = userQueryService.findExistingUserByName(username);
-        // 이미 채팅방에 참여 중인 유저 검증
-        chatPartQueryService.isUserMemberOfRoom(roomId, inviteUser.getId());
-
         ChatPart chatPart = new ChatPart(room, inviteUser);
         chatPartService.saveChatPart(chatPart);
     }
