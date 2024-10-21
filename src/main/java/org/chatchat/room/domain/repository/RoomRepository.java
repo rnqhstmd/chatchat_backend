@@ -13,6 +13,6 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
     boolean existsByName(String name);
 
     // 참여 중인 채팅방 전체 조회
-    @Query("SELECT r FROM Room r JOIN r.users u WHERE u.user.id = :userId")
-    Page<Room> findByUserId(@Param("userId") Long userId, Pageable pageable);
+    @Query("SELECT r FROM Room r JOIN r.users u WHERE u.user.id = :userId ORDER BY r.lastMessageTime DESC")
+    Page<Room> findByUserIdOrderedByLastChatDesc(@Param("userId") Long userId, Pageable pageable);
 }

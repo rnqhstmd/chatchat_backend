@@ -27,6 +27,8 @@ public class ChatMessageService {
     public MessageResponse saveTalkMessage(MessageRequest messageRequest, String username) {
         Room room = roomQueryService.findExistingRoomById(messageRequest.roomId());
         String content = messageRequest.message();
+        LocalDateTime now = LocalDateTime.now();
+        room.updateLastMessageTime(now);
 
         return getMessageResponse(MessageType.TALK, room, username, content);
     }

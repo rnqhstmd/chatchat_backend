@@ -29,7 +29,7 @@ public class RoomQueryService {
         PageRequestDto pageRequestDto = new PageRequestDto(page);
         Pageable pageable = pageRequestDto.toRoomPageable();
 
-        Page<Room> roomPage = roomRepository.findByUserId(userId, pageable);
+        Page<Room> roomPage = roomRepository.findByUserIdOrderedByLastChatDesc(userId, pageable);
         List<RoomInfoResponse> roomResponses = roomPage.getContent().stream()
                 .map(room -> new RoomInfoResponse(room.getId(), room.getName()))
                 .toList();
