@@ -28,16 +28,7 @@ public class ChatMessageService {
         Room room = roomQueryService.findExistingRoomById(messageRequest.roomId());
         String content = messageRequest.message();
 
-        ChatMessage chatMessage = ChatMessage.builder()
-                .type(MessageType.TALK)
-                .roomId(String.valueOf(room.getId()))
-                .sender(username)
-                .content(content)
-                .sentAt(LocalDateTime.now())
-                .build();
-        ChatMessage saveMessage = chatMessageRepository.save(chatMessage);
-
-        return MessageResponse.from(saveMessage);
+        return getMessageResponse(MessageType.TALK, room, username, content);
     }
 
     /**
@@ -46,17 +37,9 @@ public class ChatMessageService {
     public MessageResponse saveInviteMessage(InviteUserToRoomRequest inviteUserToRoomRequest, String username) {
         Room room = roomQueryService.findExistingRoomById(inviteUserToRoomRequest.roomId());
         String content = username + "님이 " + inviteUserToRoomRequest.username() + "님을 초대했습니다.";
+        String name = "시스템";
 
-        ChatMessage chatMessage = ChatMessage.builder()
-                .type(MessageType.SYSTEM)
-                .roomId(String.valueOf(room.getId()))
-                .sender("시스템")
-                .content(content)
-                .sentAt(LocalDateTime.now())
-                .build();
-        ChatMessage saveMessage = chatMessageRepository.save(chatMessage);
-
-        return MessageResponse.from(saveMessage);
+        return getMessageResponse(MessageType.SYSTEM, room, name, content);
     }
 
     /**
@@ -65,11 +48,16 @@ public class ChatMessageService {
     public MessageResponse saveLeaveMessage(LeaveRoomRequest leaveRoomRequest, String username) {
         Room room = roomQueryService.findExistingRoomById(leaveRoomRequest.roomId());
         String content = username + "님이 나갔습니다.";
+        String name = "시스템";
 
+        return getMessageResponse(MessageType.SYSTEM, room, name, content);
+    }
+
+    private MessageResponse getMessageResponse(MessageType system, Room room, String senderName, String content) {
         ChatMessage chatMessage = ChatMessage.builder()
-                .type(MessageType.SYSTEM)
+                .type(system)
                 .roomId(String.valueOf(room.getId()))
-                .sender("시스템")
+                .sender(senderName)
                 .content(content)
                 .sentAt(LocalDateTime.now())
                 .build();
