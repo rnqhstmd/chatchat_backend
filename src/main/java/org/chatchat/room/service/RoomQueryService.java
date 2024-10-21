@@ -22,11 +22,14 @@ public class RoomQueryService {
 
     private final RoomRepository roomRepository;
 
-    public PageResponseDto<RoomInfoResponse> getAllRooms(int page) {
+    /**
+     * 참여 중인 채팅방 전체 조회
+     */
+    public PageResponseDto<RoomInfoResponse> getAllRooms(int page, Long userId) {
         PageRequestDto pageRequestDto = new PageRequestDto(page);
         Pageable pageable = pageRequestDto.toRoomPageable();
 
-        Page<Room> roomPage = roomRepository.findAll(pageable);
+        Page<Room> roomPage = roomRepository.findByUserId(userId, pageable);
         List<RoomInfoResponse> roomResponses = roomPage.getContent().stream()
                 .map(room -> new RoomInfoResponse(room.getId(), room.getName()))
                 .toList();
