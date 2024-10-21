@@ -25,6 +25,7 @@ public class RoomController {
     private final RoomQueryService roomQueryService;
     private final ChatMessageQueryService chatMessageQueryService;
 
+    // 채팅방 생성
     @PostMapping
     public ResponseEntity<Void> createRoom(@RequestBody @Valid CreateRoomRequest createRoomRequest,
                                            @AuthUser User user) {
@@ -32,9 +33,11 @@ public class RoomController {
         return ResponseEntity.ok().build();
     }
 
+    // 참여 중인 채팅방 전체 조회
     @GetMapping
-    public ResponseEntity<PageResponseDto<RoomInfoResponse>> getAllRooms(@RequestParam(defaultValue = "0") int page) {
-        PageResponseDto<RoomInfoResponse> rooms = roomQueryService.getAllRooms(page);
+    public ResponseEntity<PageResponseDto<RoomInfoResponse>> getAllRooms(@RequestParam(defaultValue = "0") int page,
+                                                                         @AuthUser User user) {
+        PageResponseDto<RoomInfoResponse> rooms = roomQueryService.getAllRooms(page, user.getId());
         return ResponseEntity.ok(rooms);
     }
 
