@@ -6,6 +6,8 @@ import org.chatchat.roomuser.domain.repository.RoomUserRepository;
 import org.chatchat.common.exception.ForbiddenException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 import static org.chatchat.common.exception.type.ErrorType.NOT_ROOM_MEMBER_ERROR;
 
 @Service
@@ -20,8 +22,12 @@ public class RoomUserQueryService {
         }
     }
 
-    public RoomUser findExistingChatPart(Long roomId, Long userId) {
+    public RoomUser findExistingRoomUser(Long roomId, Long userId) {
         return roomUserRepository.findByRoomIdAndUserId(roomId, userId)
                 .orElseThrow(() -> new ForbiddenException(NOT_ROOM_MEMBER_ERROR));
+    }
+
+    public List<RoomUser> findExistingRoomUserListByRoomId(Long roomId) {
+        return roomUserRepository.findByRoomId(roomId);
     }
 }
