@@ -35,30 +35,30 @@ public class RoomService {
         Room room = new Room(name);
         Room savedRoom = roomRepository.save(room);
 
-        RoomUser roomUser = new RoomUser(savedRoom, user, user.getId());
-        roomUserService.saveChatPart(roomUser);
+        RoomUser roomUser = new RoomUser(savedRoom, user, user.getId(),0);
+        roomUserService.saveRoomUser(roomUser);
     }
 
     /**
      * 채팅방 초대
      */
     public void inviteUserToRoom(Long roomId, Long userId, String username) {
-        Room room = roomQueryService.findExistingRoomById(roomId);
+        Room room = roomQueryService.findExistingRoomByRoomId(roomId);
         // 이미 채팅방에 참여 중인 유저 검증
         roomUserQueryService.isUserMemberOfRoom(roomId, userId);
 
         // 초대할 유저
         User inviteUser = userQueryService.findExistingUserByName(username);
 
-        RoomUser roomUser = new RoomUser(room, inviteUser, userId);
-        roomUserService.saveChatPart(roomUser);
+        RoomUser roomUser = new RoomUser(room, inviteUser, userId,0);
+        roomUserService.saveRoomUser(roomUser);
     }
 
     /**
-     * 채팅방 나가기
+     * 채팅방 탈퇴
      */
-    public void leaveRoom(Long roomId, Long userId) {
-        RoomUser roomUser = roomUserQueryService.findExistingChatPart(roomId, userId);
-        roomUserService.removeChatPart(roomUser);
+    public void quitRoom(Long roomId, Long userId) {
+        RoomUser roomUser = roomUserQueryService.findExistingRoomUser(roomId, userId);
+        roomUserService.removeRoomUser(roomUser);
     }
 }
