@@ -1,6 +1,6 @@
 package org.chatchat.room.dto.request;
 
-public record LeaveRoomRequest(
+public record QuitRoomRequest(
         Long roomId
 ) {
 }

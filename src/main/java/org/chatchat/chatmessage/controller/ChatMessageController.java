@@ -5,7 +5,7 @@ import org.chatchat.chatmessage.dto.request.MessageRequest;
 import org.chatchat.chatmessage.dto.response.MessageResponse;
 import org.chatchat.chatmessage.service.ChatMessageService;
 import org.chatchat.room.dto.request.InviteUserToRoomRequest;
-import org.chatchat.room.dto.request.LeaveRoomRequest;
+import org.chatchat.room.dto.request.QuitRoomRequest;
 import org.chatchat.common.exception.UnauthorizedException;
 import org.chatchat.common.exception.type.ErrorType;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -35,11 +35,11 @@ public class ChatMessageController {
         messagingTemplate.convertAndSend("/topic/room." + inviteUserToRoomRequest.roomId(), messageResponse);
     }
 
-    @MessageMapping("/chat.sendLeaveMessage")
-    public void sendLeaveMessage(@Payload LeaveRoomRequest leaveRoomRequest, SimpMessageHeaderAccessor headerAccessor) {
+    @MessageMapping("/chat.sendQuitMessage")
+    public void sendLeaveMessage(@Payload QuitRoomRequest quitRoomRequest, SimpMessageHeaderAccessor headerAccessor) {
         String username = extractUsername(headerAccessor);
-        MessageResponse messageResponse = chatMessageService.saveLeaveMessage(leaveRoomRequest, username);
-        messagingTemplate.convertAndSend("/topic/room." + leaveRoomRequest.roomId(), messageResponse);
+        MessageResponse messageResponse = chatMessageService.saveQuitMessage(quitRoomRequest, username);
+        messagingTemplate.convertAndSend("/topic/room." + quitRoomRequest.roomId(), messageResponse);
     }
 
     private String extractUsername(SimpMessageHeaderAccessor headerAccessor) {

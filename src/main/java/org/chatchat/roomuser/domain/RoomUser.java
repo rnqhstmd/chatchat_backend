@@ -27,4 +27,15 @@ public class RoomUser extends BaseEntity {
 
     @Column
     private Long inviter;
+
+    @Column
+    private int count;
+
+    public void incrementCount() {
+        this.count += 1;
+    }
+
+    public void resetCount() {
+        this.count = 0;
+    }
 }

@@ -37,9 +37,15 @@ public class RoomQueryService {
         return PageResponseDto.of(roomResponses, roomPage.getNumber(), roomPage.getTotalPages());
     }
 
-    public Room findExistingRoomById(Long roomId) {
+    public Room findExistingRoomByRoomId(Long roomId) {
         return roomRepository.findById(roomId)
                 .orElseThrow(() -> new NotFoundException(ROOM_NOT_FOUND_ERROR));
+    }
+
+    public void validateExistingRoomByRoomId(Long roomId) {
+        if (!roomRepository.existsById(roomId)) {
+            throw new NotFoundException(ROOM_NOT_FOUND_ERROR);
+        }
     }
 
     public void validateExistingRoomByName(String roomName) {

@@ -8,8 +8,9 @@ import org.chatchat.chatmessage.dto.request.MessageRequest;
 import org.chatchat.chatmessage.dto.response.MessageResponse;
 import org.chatchat.room.domain.Room;
 import org.chatchat.room.dto.request.InviteUserToRoomRequest;
-import org.chatchat.room.dto.request.LeaveRoomRequest;
+import org.chatchat.room.dto.request.QuitRoomRequest;
 import org.chatchat.room.service.RoomQueryService;
+import org.chatchat.roomuser.service.RoomUserService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -20,15 +21,17 @@ public class ChatMessageService {
 
     private final ChatMessageRepository chatMessageRepository;
     private final RoomQueryService roomQueryService;
+    private final RoomUserService roomUserService;
 
     /**
      * 채팅 메세지 저장
      */
     public MessageResponse saveTalkMessage(MessageRequest messageRequest, String username) {
-        Room room = roomQueryService.findExistingRoomById(messageRequest.roomId());
+        Room room = roomQueryService.findExistingRoomByRoomId(messageRequest.roomId());
         String content = messageRequest.message();
         LocalDateTime now = LocalDateTime.now();
         room.updateLastMessageTime(now);
+        roomUserService.increaseUnreadMessageCount(room.getId(), username);
 
         return getMessageResponse(MessageType.TALK, room, username, content);
     }
@@ -37,7 +40,7 @@ public class ChatMessageService {
      * 초대 메세지 저장
      */
     public MessageResponse saveInviteMessage(InviteUserToRoomRequest inviteUserToRoomRequest, String username) {
-        Room room = roomQueryService.findExistingRoomById(inviteUserToRoomRequest.roomId());
+        Room room = roomQueryService.findExistingRoomByRoomId(inviteUserToRoomRequest.roomId());
         String content = username + "님이 " + inviteUserToRoomRequest.username() + "님을 초대했습니다.";
         String name = "시스템";
 
@@ -47,8 +50,8 @@ public class ChatMessageService {
     /**
      * 나가기 메세지 저장
      */
-    public MessageResponse saveLeaveMessage(LeaveRoomRequest leaveRoomRequest, String username) {
-        Room room = roomQueryService.findExistingRoomById(leaveRoomRequest.roomId());
+    public MessageResponse saveQuitMessage(QuitRoomRequest quitRoomRequest, String username) {
+        Room room = roomQueryService.findExistingRoomByRoomId(quitRoomRequest.roomId());
         String content = username + "님이 나갔습니다.";
         String name = "시스템";
 

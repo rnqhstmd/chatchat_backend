@@ -2,8 +2,6 @@ package org.chatchat.room.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.chatchat.chatmessage.dto.response.MessageResponse;
-import org.chatchat.chatmessage.service.ChatMessageQueryService;
 import org.chatchat.room.dto.request.CreateRoomRequest;
 import org.chatchat.room.dto.request.InviteUserToRoomRequest;
 import org.chatchat.room.dto.response.RoomInfoResponse;
@@ -23,7 +21,6 @@ public class RoomController {
 
     private final RoomService roomService;
     private final RoomQueryService roomQueryService;
-    private final ChatMessageQueryService chatMessageQueryService;
 
     // 채팅방 생성
     @PostMapping
@@ -41,15 +38,6 @@ public class RoomController {
         return ResponseEntity.ok(rooms);
     }
 
-    // 채팅방 입장
-    @GetMapping("/{roomId}/enter")
-    public ResponseEntity<PageResponseDto<MessageResponse>> enterRoom(@PathVariable("roomId") Long roomId,
-                                                                      @RequestParam(defaultValue = "0") int page,
-                                                                      @AuthUser User user) {
-        PageResponseDto<MessageResponse> messages = chatMessageQueryService.loadMessagesByRoomId(roomId, user.getId(), page);
-        return ResponseEntity.ok(messages);
-    }
-
     // 채팅방 초대
     @PostMapping("/{roomId}/invite")
     public ResponseEntity<Void> inviteUserToRoom(@PathVariable Long roomId,
@@ -60,10 +48,10 @@ public class RoomController {
     }
 
     // 채팅방 나가기
-    @DeleteMapping("/{roomId}/leave")
-    public ResponseEntity<Void> leaveRoom(@PathVariable Long roomId,
+    @DeleteMapping("/{roomId}/quit")
+    public ResponseEntity<Void> quitRoom(@PathVariable Long roomId,
                                           @AuthUser User user) {
-        roomService.leaveRoom(roomId, user.getId());
+        roomService.quitRoom(roomId, user.getId());
         return ResponseEntity.ok().build();
     }
 }
