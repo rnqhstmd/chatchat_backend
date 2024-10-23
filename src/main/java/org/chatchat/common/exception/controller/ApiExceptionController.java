@@ -1,5 +1,6 @@
 package org.chatchat.common.exception.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.extern.slf4j.Slf4j;
 import org.chatchat.common.exception.ApiException;
 import org.chatchat.common.exception.BadRequestException;
@@ -74,7 +75,7 @@ public class ApiExceptionController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiExceptionResponse.res(badRequestException));
     }
 
-    // HandlerMethodValidationException 예외를 처리하는 핸들러(요청 시 검증을 통과하지 못한 경우)
+    // HandlerMethodValidationException 예외를 처리하는 핸들러 (요청 시 검증을 통과하지 못한 경우)
     @ExceptionHandler(HandlerMethodValidationException.class)
     public ResponseEntity<ApiExceptionResponse> handlerMethodValidationExceptionHandler(
             final HandlerMethodValidationException e) {
@@ -115,6 +116,17 @@ public class ApiExceptionController {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ApiExceptionResponse> handleHttpMessageNotReadableException(
             final HttpMessageNotReadableException e) {
+
+        BadRequestException badRequestException = new BadRequestException(
+                ErrorType.INVALID_REQUEST_FORMAT_ERROR, e.getMessage());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiExceptionResponse.res(badRequestException));
+    }
+
+    // JsonProcessingException 예외를 처리하는 핸들러
+    @ExceptionHandler(JsonProcessingException.class)
+    public ResponseEntity<ApiExceptionResponse> handleJsonProcessingException(JsonProcessingException e) {
+        log.error("Json processing error: {}", e.getMessage());
 
         BadRequestException badRequestException = new BadRequestException(
                 ErrorType.INVALID_REQUEST_FORMAT_ERROR, e.getMessage());
