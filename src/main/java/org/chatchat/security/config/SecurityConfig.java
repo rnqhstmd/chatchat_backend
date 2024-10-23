@@ -1,4 +1,4 @@
-package org.chatchat.common.config;
+package org.chatchat.security.config;
 
 
 import lombok.RequiredArgsConstructor;
