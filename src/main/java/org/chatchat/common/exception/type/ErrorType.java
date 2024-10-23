@@ -49,6 +49,7 @@ public enum ErrorType {
 
     // Internal Server
     INTERNAL_SERVER_ERROR("INTERNAL_50000", "서버 내부 에러입니다."),
+    WEBSOCKET_DISCONNECTED_ERROR("INTERNAL_50001", "웹소켓 연결이 끊어졌습니다."),
 
     // Validation
     NOT_NULL_VALID_ERROR( "VALID_90000", "필수값이 누락되었습니다."),
