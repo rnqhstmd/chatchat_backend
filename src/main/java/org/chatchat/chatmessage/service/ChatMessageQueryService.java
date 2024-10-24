@@ -32,7 +32,7 @@ public class ChatMessageQueryService {
         Page<ChatMessage> messagePage = chatMessageRepository.findByRoomIdOrderBySentAtDesc(String.valueOf(roomId), pageable);
         List<MessageResponse> messageResponses = messagePage.getContent()
                 .stream()
-                .map(MessageResponse::from)
+                .map(MessageResponse::fromChatMessage)
                 .toList();
 
         return PageResponseDto.of(messageResponses, messagePage.getNumber(), messagePage.getTotalPages());

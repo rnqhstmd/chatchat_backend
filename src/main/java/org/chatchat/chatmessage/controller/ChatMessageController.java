@@ -2,7 +2,6 @@ package org.chatchat.chatmessage.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.chatchat.chatmessage.dto.request.MessageRequest;
-import org.chatchat.chatmessage.dto.response.MessageResponse;
 import org.chatchat.chatmessage.service.ChatMessageService;
 import org.chatchat.room.dto.request.InviteUserToRoomRequest;
 import org.chatchat.room.dto.request.QuitRoomRequest;
@@ -11,7 +10,6 @@ import org.chatchat.common.exception.type.ErrorType;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
-import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Controller;
 
 @Controller
@@ -19,27 +17,23 @@ import org.springframework.stereotype.Controller;
 public class ChatMessageController {
 
     private final ChatMessageService chatMessageService;
-    private final SimpMessageSendingOperations messagingTemplate;
 
     @MessageMapping("/chat.sendMessage")
-    public void sendTalkMessage(@Payload MessageRequest messageRequest, SimpMessageHeaderAccessor headerAccessor) {
+    public void sendTalkMessage(@Payload MessageRequest messageRequest,SimpMessageHeaderAccessor headerAccessor) {
         String username = extractUsername(headerAccessor);
-        MessageResponse messageResponse = chatMessageService.saveTalkMessage(messageRequest, username);
-        messagingTemplate.convertAndSend("/topic/room." + messageRequest.roomId(), messageResponse);
+        chatMessageService.saveAndSendChatMessage(messageRequest,username);
     }
 
     @MessageMapping("/chat.sendInviteMessage")
     public void sendInviteMessage(@Payload InviteUserToRoomRequest inviteUserToRoomRequest, SimpMessageHeaderAccessor headerAccessor) {
         String username = extractUsername(headerAccessor);
-        MessageResponse messageResponse = chatMessageService.saveInviteMessage(inviteUserToRoomRequest, username);
-        messagingTemplate.convertAndSend("/topic/room." + inviteUserToRoomRequest.roomId(), messageResponse);
+        chatMessageService.sendInviteMessage(inviteUserToRoomRequest,username);
     }
 
     @MessageMapping("/chat.sendQuitMessage")
-    public void sendLeaveMessage(@Payload QuitRoomRequest quitRoomRequest, SimpMessageHeaderAccessor headerAccessor) {
+    public void sendQuitMessage(@Payload QuitRoomRequest quitRoomRequest, SimpMessageHeaderAccessor headerAccessor) {
         String username = extractUsername(headerAccessor);
-        MessageResponse messageResponse = chatMessageService.saveQuitMessage(quitRoomRequest, username);
-        messagingTemplate.convertAndSend("/topic/room." + quitRoomRequest.roomId(), messageResponse);
+        chatMessageService.sendQuitMessage(quitRoomRequest,username);
     }
 
     private String extractUsername(SimpMessageHeaderAccessor headerAccessor) {
