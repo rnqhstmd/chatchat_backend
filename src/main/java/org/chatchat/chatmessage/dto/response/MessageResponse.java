@@ -1,7 +1,7 @@
 package org.chatchat.chatmessage.dto.response;
 
 import org.chatchat.chatmessage.domain.ChatMessage;
-import org.chatchat.kafka.domain.KafkaMessage;
+import org.chatchat.kafka.domain.KafkaChatMessage;
 
 import java.time.format.DateTimeFormatter;
 
@@ -24,13 +24,13 @@ public record MessageResponse(
         );
     }
 
-    public static MessageResponse fromKafkaMessage(KafkaMessage message) {
+    public static MessageResponse fromKafkaMessage(KafkaChatMessage message) {
         return new MessageResponse(
                 message.getId(),
                 message.getRoomId(),
                 message.getSenderName(),
                 message.getContent(),
-                FORMATTER.format(message.getSentAt())
+                String.valueOf(message.getSentAt())
         );
     }
 }
