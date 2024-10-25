@@ -38,6 +38,9 @@ public enum ErrorType {
     ALREADY_JOINED_USER_ERROR("ROOM_USER_40900", "이미 참가한 채팅방입니다."),
     NOT_ROOM_MEMBER_ERROR("ROOM_USER_40300", "채팅방의 멤버가 아닙니다."),
 
+    // ChatMessage
+    CHAT_MESSAGE_NOT_FOUND_ERROR("CHAT_MESSAGE_40400", "존재하지 않는 메세지입니다."),
+
     // Resource
     NO_RESOURCE_ERROR( "RESOURCE_40000", "해당 리소스를 찾을 수 없습니다."),
 
@@ -50,6 +53,7 @@ public enum ErrorType {
     // Internal Server
     INTERNAL_SERVER_ERROR("INTERNAL_50000", "서버 내부 에러입니다."),
     WEBSOCKET_DISCONNECTED_ERROR("INTERNAL_50001", "웹소켓 연결이 끊어졌습니다."),
+    KAFKA_SERVER_ERROR("INTERNAL_50002", "카프카 서버 에러입니다."),
 
     // Validation
     NOT_NULL_VALID_ERROR( "VALID_90000", "필수값이 누락되었습니다."),
