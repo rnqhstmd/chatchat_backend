@@ -31,13 +31,13 @@ public class ChatMessageService {
 
     public void saveTalkMessage(MessageRequest messageRequest, String username) {
         try {
-            ChatMessage chatMessage = ChatMessage.builder()
-                    .type(TALK)
-                    .roomId(String.valueOf(messageRequest.roomId()))
-                    .sender(username)
-                    .content(messageRequest.message())
-                    .sentAt(LocalDateTime.now())
-                    .build();
+            ChatMessage chatMessage = new ChatMessage(
+                    TALK,
+                    String.valueOf(messageRequest.roomId()),
+                    username,
+                    messageRequest.message(),
+                    LocalDateTime.now()
+            );
 
             ChatMessage saveChatMessage = chatMessageRepository.save(chatMessage);
             kafkaProducerService.publishStoredEvent(saveChatMessage);
@@ -47,19 +47,20 @@ public class ChatMessageService {
                     .errorCode("CHAT_MESSAGE_SAVE_FAILURE")
                     .errorMessage("Failed to save chat message: " + e.getMessage())
                     .build();
+
             kafkaProducerService.publishFailureEvent(errorMessage);
         }
     }
 
     public void saveInviteMessage(InviteUserToRoomRequest inviteUserToRoomRequest, String username) {
         try {
-            ChatMessage chatMessage = ChatMessage.builder()
-                    .type(SYSTEM)
-                    .roomId(String.valueOf(inviteUserToRoomRequest.roomId()))
-                    .sender("시스템")
-                    .content(username + "님이 " + inviteUserToRoomRequest.username() + "님을 초대했습니다.")
-                    .sentAt(LocalDateTime.now())
-                    .build();
+            ChatMessage chatMessage = new ChatMessage(
+                    SYSTEM,
+                    String.valueOf(inviteUserToRoomRequest.roomId()),
+                    "시스템",
+                    username + "님이 " + inviteUserToRoomRequest.username() + "님을 초대했습니다.",
+                    LocalDateTime.now()
+            );
 
             chatMessageRepository.save(chatMessage);
             kafkaProducerService.publishStoredEvent(chatMessage);
@@ -76,13 +77,13 @@ public class ChatMessageService {
 
     public void saveQuitMessage(QuitRoomRequest quitRoomRequest, String username) {
         try {
-            ChatMessage chatMessage = ChatMessage.builder()
-                    .type(SYSTEM)
-                    .roomId(String.valueOf(quitRoomRequest.roomId()))
-                    .sender("시스템")
-                    .content(username + "님이 나갔습니다.")
-                    .sentAt(LocalDateTime.now())
-                    .build();
+            ChatMessage chatMessage = new ChatMessage(
+                    SYSTEM,
+                    String.valueOf(quitRoomRequest.roomId()),
+                    "시스템",
+                    username + "님이 나갔습니다.",
+                    LocalDateTime.now()
+            );
 
             chatMessageRepository.save(chatMessage);
             kafkaProducerService.publishStoredEvent(chatMessage);
@@ -109,6 +110,7 @@ public class ChatMessageService {
                     .errorCode("MESSAGE_SEND_FAILURE")
                     .errorMessage("Failed to send message over WebSocket: " + e.getMessage())
                     .build();
+
             kafkaProducerService.publishFailureEvent(errorMessage);
         }
     }
