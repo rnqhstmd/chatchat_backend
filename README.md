@@ -13,7 +13,7 @@
 
 ### DB
 ![mySQL](https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
-![mongoDB](https://img.shields.io/badge/mongoDB-4479A1?style=for-the-badge&logo=mongoDB&logoColor=white)
+![mongoDB](https://img.shields.io/badge/mongoDB-4479A1?style=for-the-badge&logo=mongoDB&logoColor=green)
 
 ### Develop Tool
 ![IntelliJ](https://img.shields.io/badge/intelliJ-000000?style=for-the-badge&logo=intellij-idea&logoColor=white)
