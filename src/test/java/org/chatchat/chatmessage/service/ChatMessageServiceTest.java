@@ -12,6 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.chatchat.chatmessage.domain.MessageType.TALK;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -75,7 +76,6 @@ class ChatMessageServiceTest {
         chatMessageService.deleteMessage(messageId);
 
         // Then
-        verify(chatMessageQueryService).findExistingChatMessage(messageId);
-        verify(chatMessageRepository).delete(chatMessage);
+        assertThat(chatMessageRepository.findById(messageId)).isEmpty();
     }
 }
