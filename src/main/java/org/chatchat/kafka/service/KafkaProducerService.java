@@ -50,13 +50,13 @@ public class KafkaProducerService {
     }
 
     private KafkaChatMessage convertToKafkaMessage(ChatMessage chatMessage) {
-        return KafkaChatMessage.builder()
-                .id(chatMessage.getId())
-                .roomId(chatMessage.getRoomId())
-                .senderName(chatMessage.getSender())
-                .content(chatMessage.getContent())
-                .sentAt(chatMessage.getSentAt())
-                .type(chatMessage.getType().toString())
-                .build();
+        return new KafkaChatMessage(
+                chatMessage.getId(),
+                String.valueOf(chatMessage.getType()),
+                chatMessage.getRoomId(),
+                chatMessage.getSender(),
+                chatMessage.getContent(),
+                chatMessage.getSentAt()
+        );
     }
 }
