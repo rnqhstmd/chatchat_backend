@@ -19,21 +19,21 @@ public class ChatMessageController {
     private final ChatMessageService chatMessageService;
 
     @MessageMapping("/chat.sendMessage")
-    public void sendTalkMessage(@Payload MessageRequest messageRequest,SimpMessageHeaderAccessor headerAccessor) {
+    public void saveAndSendTalkMessage(@Payload MessageRequest messageRequest, SimpMessageHeaderAccessor headerAccessor) {
         String username = extractUsername(headerAccessor);
-        chatMessageService.saveAndSendChatMessage(messageRequest,username);
+        chatMessageService.saveTalkMessage(messageRequest, username);
     }
 
     @MessageMapping("/chat.sendInviteMessage")
-    public void sendInviteMessage(@Payload InviteUserToRoomRequest inviteUserToRoomRequest, SimpMessageHeaderAccessor headerAccessor) {
+    public void saveAndSendInviteMessage(@Payload InviteUserToRoomRequest inviteUserToRoomRequest, SimpMessageHeaderAccessor headerAccessor) {
         String username = extractUsername(headerAccessor);
-        chatMessageService.sendInviteMessage(inviteUserToRoomRequest,username);
+        chatMessageService.saveInviteMessage(inviteUserToRoomRequest, username);
     }
 
     @MessageMapping("/chat.sendQuitMessage")
-    public void sendQuitMessage(@Payload QuitRoomRequest quitRoomRequest, SimpMessageHeaderAccessor headerAccessor) {
+    public void saveAndSendQuitMessage(@Payload QuitRoomRequest quitRoomRequest, SimpMessageHeaderAccessor headerAccessor) {
         String username = extractUsername(headerAccessor);
-        chatMessageService.sendQuitMessage(quitRoomRequest,username);
+        chatMessageService.saveQuitMessage(quitRoomRequest, username);
     }
 
     private String extractUsername(SimpMessageHeaderAccessor headerAccessor) {
