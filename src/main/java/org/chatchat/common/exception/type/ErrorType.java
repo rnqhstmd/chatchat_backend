@@ -24,9 +24,9 @@ public enum ErrorType {
     ACCESS_DENIED_ERROR("AUTH_40300", "접근 권한이 없습니다."),
 
     // User
-    DUPLICATED_EMAIL_ERROR( "USER_40900", "이미 사용 중인 이메일입니다."),
-    DUPLICATED_NAME_ERROR( "USER_40901", "이미 사용 중인 이름입니다."),
-    USER_NOT_FOUND_ERROR( "USER_40400", "해당 유저를 찾을 수 없습니다."),
+    DUPLICATED_EMAIL_ERROR("USER_40900", "이미 사용 중인 이메일입니다."),
+    DUPLICATED_NAME_ERROR("USER_40901", "이미 사용 중인 이름입니다."),
+    USER_NOT_FOUND_ERROR("USER_40400", "해당 유저를 찾을 수 없습니다."),
     INVALID_CREDENTIAL_ERROR("USER_40100", "아이디나 비밀번호가 일치하지 않습니다."),
 
     // Room
@@ -42,10 +42,10 @@ public enum ErrorType {
     CHAT_MESSAGE_NOT_FOUND_ERROR("CHAT_MESSAGE_40400", "존재하지 않는 메세지입니다."),
 
     // Resource
-    NO_RESOURCE_ERROR( "RESOURCE_40000", "해당 리소스를 찾을 수 없습니다."),
+    NO_RESOURCE_ERROR("RESOURCE_40000", "해당 리소스를 찾을 수 없습니다."),
 
     // HTTP
-    METHOD_NOT_ALLOWED_ERROR( "HTTP_40500", "잘못된 HTTP 메서드입니다."),
+    METHOD_NOT_ALLOWED_ERROR("HTTP_40500", "잘못된 HTTP 메서드입니다."),
     INVALID_REQUEST_PARAMETER_ERROR("HTTP_40000", "요청 파라미터가 잘못되었습니다."),
     MISSING_REQUEST_PARAMETER_ERROR("HTTP_40001", "필수 요청 파라미터가 누락되었습니다."),
     INVALID_REQUEST_FORMAT_ERROR("HTTP_40002", "요청에 필요한 데이터가 잘못되었습니다."),
@@ -54,11 +54,13 @@ public enum ErrorType {
     INTERNAL_SERVER_ERROR("INTERNAL_50000", "서버 내부 에러입니다."),
     WEBSOCKET_DISCONNECTED_ERROR("INTERNAL_50001", "웹소켓 연결이 끊어졌습니다."),
     KAFKA_SERVER_ERROR("INTERNAL_50002", "카프카 서버 에러입니다."),
+    SERIALIZE_ERROR("INTERNAL_50003", "직렬화 중 문제가 발생했습니다."),
+    DESERIALIZE_ERROR("INTERNAL_50004", "역직렬화 중 문제가 발생했습니다."),
 
     // Validation
-    NOT_NULL_VALID_ERROR( "VALID_90000", "필수값이 누락되었습니다."),
-    NOT_BLANK_VALID_ERROR( "VALID_90001", "필수값이 빈 값이거나 공백으로 되어있습니다."),
-    REGEX_VALID_ERROR( "VALID_90002", "형식에 맞지 않습니다."),
+    NOT_NULL_VALID_ERROR("VALID_90000", "필수값이 누락되었습니다."),
+    NOT_BLANK_VALID_ERROR("VALID_90001", "필수값이 빈 값이거나 공백으로 되어있습니다."),
+    REGEX_VALID_ERROR("VALID_90002", "형식에 맞지 않습니다."),
     LENGTH_VALID_ERROR("VALID_90003", "길이가 유효하지 않습니다.");
 
     private final String errorCode;
