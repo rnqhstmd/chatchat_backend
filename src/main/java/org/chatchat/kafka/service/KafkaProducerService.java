@@ -12,9 +12,7 @@ import org.chatchat.kafka.domain.KafkaErrorMessage;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
-
-import static org.chatchat.common.exception.type.ErrorType.INVALID_REQUEST_FORMAT_ERROR;
-import static org.chatchat.common.exception.type.ErrorType.KAFKA_SERVER_ERROR;
+import static org.chatchat.common.exception.type.ErrorType.*;
 
 @Slf4j
 @Service
@@ -31,7 +29,7 @@ public class KafkaProducerService {
             String jsonMessage = objectMapper.writeValueAsString(kafkaChatMessage);
             kafkaTemplate.send("chat-message-send", jsonMessage);
         } catch (JsonProcessingException e) {
-            throw new BadRequestException(INVALID_REQUEST_FORMAT_ERROR, e.getMessage());
+            throw new InternalServerException(SERIALIZE_ERROR, e.getMessage());
         } catch (Exception e) {
             throw new InternalServerException(KAFKA_SERVER_ERROR, e.getMessage());
         }

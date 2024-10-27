@@ -30,7 +30,7 @@ public class KafkaConsumerService {
             KafkaChatMessage kafkaChatMessage = objectMapper.readValue(messageJson, KafkaChatMessage.class);
             chatMessageService.sendMessage(kafkaChatMessage);
         } catch (JsonProcessingException e) {
-            throw new BadRequestException(INVALID_REQUEST_FORMAT_ERROR, e.getMessage());
+            throw new InternalServerException(DESERIALIZE_ERROR, e.getMessage());
         } catch (Exception e) {
             throw new InternalServerException(KAFKA_SERVER_ERROR, e.getMessage());
         }
