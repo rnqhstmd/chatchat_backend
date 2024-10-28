@@ -21,6 +21,7 @@ public class ChatMessage {
     private String sender;
     private String content;
     private LocalDateTime sentAt;
+    private int unreadCount;  // 읽지 않은 사람의 수
 
     public ChatMessage(MessageType type, String roomId, String sender, String content, LocalDateTime sentAt) {
         this.type = type;
