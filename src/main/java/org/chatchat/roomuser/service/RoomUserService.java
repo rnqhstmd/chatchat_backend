@@ -1,6 +1,7 @@
 package org.chatchat.roomuser.service;
 
 import lombok.RequiredArgsConstructor;
+import org.chatchat.chatmessage.service.ChatMessageQueryService;
 import org.chatchat.room.service.RoomQueryService;
 import org.chatchat.room.util.RoomSessionManager;
 import org.chatchat.roomuser.domain.RoomUser;
@@ -17,6 +18,7 @@ public class RoomUserService {
 
     private final RoomUserRepository roomUserRepository;
     private final RoomUserQueryService roomUserQueryService;
+    private final ChatMessageQueryService chatMessageQueryService;
     private final RoomQueryService roomQueryService;
     private final RoomSessionManager roomSessionManager;
 
@@ -67,8 +69,8 @@ public class RoomUserService {
         String sessionRoomId = roomSessionManager.getCurrentRoom(sessionId);
         if (sessionRoomId != null && sessionRoomId.equals(roomId.toString())) {
             roomSessionManager.leaveRoom(sessionId);
-            RoomUser roomUser = roomUserQueryService.findExistingRoomUser(Long.valueOf(sessionRoomId), userId);
-            roomUser.incrementCount();
+            RoomUser roomUser = roomUserQueryService.findExistingRoomUser(roomId, userId);
+            roomUser.updateLastReadMessageId(chatMessageQueryService.getLatestMessageId(String.valueOf(roomId)));
             roomUserRepository.save(roomUser);
         }
     }
