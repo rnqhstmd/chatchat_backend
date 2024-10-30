@@ -9,6 +9,7 @@ import org.chatchat.roomuser.service.RoomUserQueryService;
 import org.chatchat.common.page.dto.request.PageRequestDto;
 import org.chatchat.common.page.dto.response.PageResponseDto;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -44,5 +45,12 @@ public class ChatMessageQueryService {
     public ChatMessage findExistingChatMessage(String id) {
         return chatMessageRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(CHAT_MESSAGE_NOT_FOUND_ERROR));
+    }
+
+    // 특정 채팅방의 최신 메시지 ID를 반환
+    public String getLatestMessageId(String roomId) {
+        Pageable limit = PageRequest.of(0, 1);  // 최신 1개 메시지만 조회
+        List<ChatMessage> latestMessages = chatMessageRepository.findLatestMessageByRoomId(roomId, limit);
+        return latestMessages.isEmpty() ? null : latestMessages.get(0).getId();
     }
 }
