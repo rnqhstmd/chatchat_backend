@@ -29,7 +29,10 @@ public class RoomUser extends BaseEntity {
     private Long inviter;
 
     @Column
-    private int unreadCount; // 채팅방 별 읽지 않은 메세지 갯수
+    private int unreadCount; // 채팅방별 읽지 않은 메세지 갯수
+
+    @Column
+    private String lastReadMessageId;  // 마지막으로 읽은 메시지의 ID
 
     public void incrementCount() {
         this.unreadCount += 1;
@@ -37,5 +40,9 @@ public class RoomUser extends BaseEntity {
 
     public void resetCount() {
         this.unreadCount = 0;
+    }
+
+    public void updateLastReadMessageId(String messageId) {
+        this.lastReadMessageId = messageId;
     }
 }
