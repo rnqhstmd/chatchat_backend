@@ -5,12 +5,14 @@ import org.chatchat.roomuser.domain.RoomUser;
 import org.chatchat.roomuser.domain.repository.RoomUserRepository;
 import org.chatchat.common.exception.ForbiddenException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 import static org.chatchat.common.exception.type.ErrorType.NOT_ROOM_MEMBER_ERROR;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class RoomUserQueryService {
 
@@ -29,5 +31,9 @@ public class RoomUserQueryService {
 
     public List<RoomUser> findExistingRoomUserListByRoomId(Long roomId) {
         return roomUserRepository.findByRoomId(roomId);
+    }
+
+    public Long countUnreadMessages(Long roomId, String messageId) {
+        return roomUserRepository.countUnreadUsers(roomId, messageId);
     }
 }
