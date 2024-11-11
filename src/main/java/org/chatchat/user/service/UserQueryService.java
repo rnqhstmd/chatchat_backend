@@ -7,12 +7,14 @@ import org.chatchat.user.domain.User;
 import org.chatchat.user.domain.repository.UserRepository;
 import org.chatchat.user.dto.response.SearchUserResponse;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 import static org.chatchat.common.exception.type.ErrorType.*;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class UserQueryService {
 
