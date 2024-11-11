@@ -29,13 +29,14 @@ public class WebSocketEventListener {
         String username = (String) headerAccessor.getSessionAttributes().get("username");
         log.info("새로운 웹소켓 연결이 있습니다. 유저 : {}", username);
 
+        // 사용자 추가
+        webSocketTracker.userConnected();
+
         // 웹소켓 연결 시 사용자가 아무도 없을 경우
         if (!webSocketTracker.hasActiveConnections()) {
             // 카프카 컨슈머로서 구독 시작
             kafkaConsumerService.startListening();
         }
-        // 사용자 추가
-        webSocketTracker.userConnected();
     }
 
     // 웹소켓 연결 해제 시 호출되는 메서드
