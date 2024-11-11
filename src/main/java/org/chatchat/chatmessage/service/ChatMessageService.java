@@ -98,13 +98,6 @@ public class ChatMessageService {
         }
     }
 
-    // 사용자가 메시지를 읽음으로 표시
-    public void markMessageAsRead(String messageId, String userId) {
-        ChatMessage chatMessage = chatMessageQueryService.findExistingChatMessage(messageId);
-        chatMessage.markAsRead(userId);
-        chatMessageRepository.save(chatMessage);
-    }
-
     public void sendMessage(KafkaChatMessage kafkaChatMessage) {
         MessageResponse messageResponse = MessageResponse.fromKafkaMessage(kafkaChatMessage);
         String destination = "/topic/room." + messageResponse.roomId();
