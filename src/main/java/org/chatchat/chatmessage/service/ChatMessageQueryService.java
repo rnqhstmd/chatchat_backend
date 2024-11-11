@@ -12,12 +12,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 import static org.chatchat.common.exception.type.ErrorType.CHAT_MESSAGE_NOT_FOUND_ERROR;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class ChatMessageQueryService {
 
@@ -36,7 +38,10 @@ public class ChatMessageQueryService {
         Page<ChatMessage> messagePage = chatMessageRepository.findByRoomIdOrderBySentAtDesc(String.valueOf(roomId), pageable);
         List<MessageResponse> messageResponses = messagePage.getContent()
                 .stream()
-                .map(MessageResponse::fromChatMessage)
+                .map(msg -> {
+                    int unreadCount = calculateUnreadMessages(String.valueOf(roomId), msg.getId());
+                    return MessageResponse.fromChatMessage(msg, unreadCount);
+                })
                 .toList();
 
         return PageResponseDto.of(messageResponses, messagePage.getNumber(), messagePage.getTotalPages());
@@ -52,5 +57,14 @@ public class ChatMessageQueryService {
         Pageable limit = PageRequest.of(0, 1);  // 최신 1개 메시지만 조회
         List<ChatMessage> latestMessages = chatMessageRepository.findLatestMessageByRoomId(roomId, limit);
         return latestMessages.isEmpty() ? null : latestMessages.get(0).getId();
+    }
+
+    public int calculateUnreadMessages(String roomId, String messageId) {
+        if (!chatMessageRepository.existsById(messageId)) {
+            throw new NotFoundException(CHAT_MESSAGE_NOT_FOUND_ERROR);
+        }
+
+        Long count = roomUserQueryService.countUnreadMessages(Long.valueOf(roomId), messageId);
+        return count != null ? count.intValue() : 0;
     }
 }
