@@ -45,4 +45,11 @@ public class RoomUser extends BaseEntity {
     public void updateLastReadMessageId(String messageId) {
         this.lastReadMessageId = messageId;
     }
+
+    public RoomUser(Room room, User user, Long inviter, int unreadCount) {
+        this.room = room;
+        this.user = user;
+        this.inviter = inviter;
+        this.unreadCount = unreadCount;
+    }
 }

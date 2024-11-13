@@ -36,4 +36,8 @@ public class RoomUserQueryService {
     public Long countUnreadMessages(Long roomId, String messageId) {
         return roomUserRepository.countUnreadUsers(roomId, messageId);
     }
+
+    public int findUnreadMessagesCount(Long roomId, Long userId) {
+        return roomUserRepository.findUnreadMessagesCount(roomId, userId);
+    }
 }
