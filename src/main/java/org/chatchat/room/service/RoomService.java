@@ -35,7 +35,7 @@ public class RoomService {
         Room room = new Room(name);
         Room savedRoom = roomRepository.save(room);
 
-        RoomUser roomUser = new RoomUser(savedRoom, user, user.getId(),0);
+        RoomUser roomUser = new RoomUser(savedRoom, user, user.getId(), 0);
         roomUserService.saveRoomUser(roomUser);
     }
 
@@ -50,7 +50,7 @@ public class RoomService {
         // 초대할 유저
         User inviteUser = userQueryService.findExistingUserByName(username);
 
-        RoomUser roomUser = new RoomUser(room, inviteUser, userId,0);
+        RoomUser roomUser = new RoomUser(room, inviteUser, userId, 0);
         roomUserService.saveRoomUser(roomUser);
     }
 
