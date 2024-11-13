@@ -16,6 +16,9 @@ public interface RoomUserRepository extends JpaRepository<RoomUser, Long> {
 
     List<RoomUser> findByRoomId(Long roomId);
 
+    @Query("SELECT ru.unreadCount FROM RoomUser ru WHERE ru.room.id = :roomId AND ru.user.id = :userId")
+    int findUnreadMessagesCount(@Param("roomId") Long roomId, @Param("userId") Long userId);
+
     @Query("SELECT COUNT(ru) FROM RoomUser ru WHERE ru.room.id = :roomId AND ru.lastReadMessageId < :messageId")
     Long countUnreadUsers(@Param("roomId") Long roomId, @Param("messageId") String messageId);
 }
