@@ -56,6 +56,7 @@ public enum ErrorType {
     KAFKA_SERVER_ERROR("INTERNAL_50002", "카프카 서버 에러입니다."),
     SERIALIZE_ERROR("INTERNAL_50003", "직렬화 중 문제가 발생했습니다."),
     DESERIALIZE_ERROR("INTERNAL_50004", "역직렬화 중 문제가 발생했습니다."),
+    SSE_CONNECTION_ERROR("INTERNAL_50005", "SSE 연결 설정 중 오류가 발생했습니다."),
 
     // Validation
     NOT_NULL_VALID_ERROR("VALID_90000", "필수값이 누락되었습니다."),
