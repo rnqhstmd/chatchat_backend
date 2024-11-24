@@ -15,14 +15,14 @@ public class Notification {
     @Id
     private String id;
     private String userId;
-    private String sender;
+    private String senderName;
     private String roomName;
     private String message;
     private LocalDateTime sentAt;
 
     public Notification(String userId, String sender, String roomName, String message, LocalDateTime sentAt) {
         this.userId = userId;
-        this.sender = sender;
+        this.senderName = sender;
         this.roomName = roomName;
         this.message = message;
         this.sentAt = sentAt;
