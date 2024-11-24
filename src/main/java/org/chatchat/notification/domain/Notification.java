@@ -19,4 +19,12 @@ public class Notification {
     private String roomName;
     private String message;
     private LocalDateTime sentAt;
+
+    public Notification(String userId, String sender, String roomName, String message, LocalDateTime sentAt) {
+        this.userId = userId;
+        this.sender = sender;
+        this.roomName = roomName;
+        this.message = message;
+        this.sentAt = sentAt;
+    }
 }
