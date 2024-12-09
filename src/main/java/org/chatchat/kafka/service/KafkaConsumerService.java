@@ -9,6 +9,7 @@ import org.chatchat.common.exception.BadRequestException;
 import org.chatchat.common.exception.InternalServerException;
 import org.chatchat.kafka.domain.KafkaChatMessage;
 import org.chatchat.kafka.domain.KafkaErrorMessage;
+import org.chatchat.notification.service.NotificationService;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.config.KafkaListenerEndpointRegistry;
 import org.springframework.stereotype.Service;
@@ -22,13 +23,18 @@ public class KafkaConsumerService {
 
     private final ObjectMapper objectMapper;
     private final ChatMessageService chatMessageService;
+    private final NotificationService notificationService;
     private final KafkaListenerEndpointRegistry endpointRegistry;
 
     @KafkaListener(id = "successListener", topics = {"chat-message-send"}, groupId = "chat-group", autoStartup = "false")
     public void listenToSaveSuccessMessage(String messageJson) {
         try {
             KafkaChatMessage kafkaChatMessage = objectMapper.readValue(messageJson, KafkaChatMessage.class);
+            // 메세지 저장
             chatMessageService.sendMessage(kafkaChatMessage);
+
+            // 알림 전송
+            notificationService.processNotification(kafkaChatMessage);
         } catch (JsonProcessingException e) {
             throw new InternalServerException(DESERIALIZE_ERROR, e.getMessage());
         } catch (Exception e) {
