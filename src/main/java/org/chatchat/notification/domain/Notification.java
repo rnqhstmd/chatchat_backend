@@ -1,28 +1,37 @@
 package org.chatchat.notification.domain;
 
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import lombok.NoArgsConstructor;
+import org.chatchat.common.entity.BaseEntity;
+import org.chatchat.user.domain.User;
 
 import java.time.LocalDateTime;
 
 
 @Getter
-@Document(collection = "notification")
+@Entity
+@Table(name = "notifications")
+@NoArgsConstructor
 @AllArgsConstructor
-public class Notification {
-    @Id
-    private String id;
-    private String userId;
-    private String senderName;
+public class Notification extends BaseEntity {
+
+    @Column
     private String roomName;
+
+    @Column
     private String message;
+
+    @Column
     private LocalDateTime sentAt;
 
-    public Notification(String userId, String sender, String roomName, String message, LocalDateTime sentAt) {
-        this.userId = userId;
-        this.senderName = sender;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    public Notification(User user, String roomName, String message, LocalDateTime sentAt) {
+        this.user = user;
         this.roomName = roomName;
         this.message = message;
         this.sentAt = sentAt;
