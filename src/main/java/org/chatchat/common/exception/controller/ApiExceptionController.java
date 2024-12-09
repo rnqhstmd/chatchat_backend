@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.extern.slf4j.Slf4j;
 import org.chatchat.common.exception.ApiException;
 import org.chatchat.common.exception.BadRequestException;
+import org.chatchat.common.exception.InternalServerException;
 import org.chatchat.common.exception.dto.ApiExceptionResponse;
 import org.chatchat.common.exception.type.ErrorType;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.async.AsyncRequestTimeoutException;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
@@ -132,6 +134,31 @@ public class ApiExceptionController {
                 ErrorType.INVALID_REQUEST_FORMAT_ERROR, e.getMessage());
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiExceptionResponse.res(badRequestException));
+    }
+
+    @ExceptionHandler(AsyncRequestTimeoutException.class)
+    public ResponseEntity<ApiExceptionResponse> handleAsyncRequestTimeoutException(AsyncRequestTimeoutException e) {
+        // SSE 연결 타임아웃
+        InternalServerException sseException = new InternalServerException(
+                ErrorType.SSE_TIMEOUT_ERROR,
+                "SSE connection timed out"
+        );
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(ApiExceptionResponse.res(sseException));
+    }
+
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<ApiExceptionResponse> handleIllegalStateException(IllegalStateException e) {
+        // SSE 연결이 이미 완료되었거나 타임아웃된 경우
+        if (e.getMessage().contains("AsyncContext")) {
+            InternalServerException sseException = new InternalServerException(
+                    ErrorType.SSE_CONNECTION_CLOSED_ERROR,
+                    "SSE connection already completed"
+            );
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ApiExceptionResponse.res(sseException));
+        }
+        throw e;
     }
 
     @ExceptionHandler(Exception.class)

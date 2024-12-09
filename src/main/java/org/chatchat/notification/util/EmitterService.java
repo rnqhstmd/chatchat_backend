@@ -11,7 +11,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
-import static org.chatchat.common.exception.type.ErrorType.SSE_CONNECTION_ERROR;
+import static org.chatchat.common.exception.type.ErrorType.SSE_SEND_ERROR;
 
 @Slf4j
 @Service
@@ -59,7 +59,7 @@ public class EmitterService {
         } catch (IOException e) {
             log.error("Error while setting up SSE connection for user: {}", userId, e);
             removeEmitter(userId);
-            throw new InternalServerException(SSE_CONNECTION_ERROR, e.toString());
+            throw new InternalServerException(SSE_SEND_ERROR, e.toString());
         }
 
         return sseEmitter;
@@ -68,17 +68,37 @@ public class EmitterService {
     public void notify(String userId, Object event) {
         SseEmitter emitter = (SseEmitter) redisTemplate.opsForValue().get(REDIS_KEY_PREFIX + userId);
 
-        if (emitter != null) {
-            try {
-                emitter.send(SseEmitter.event()
-                        .id(String.valueOf(System.currentTimeMillis()))
-                        .name(EVENT_NAME)
-                        .data(event));
+        if (emitter == null) {
+            throw new InternalServerException(ErrorType.SSE_EMITTER_NOT_FOUND_ERROR,
+                    "emitter 를 찾지 못한 user Id : " + userId);
+        }
 
-            } catch (IOException e) {
-                log.error("Failed to send notification to user: {}", userId, e);
-                removeEmitter(userId);
-            }
+        try {
+            emitter.send(SseEmitter.event()
+                    .id(String.valueOf(System.currentTimeMillis()))
+                    .name(EVENT_NAME)
+                    .data(event));
+
+        } catch (IOException e) {
+            // 네트워크 통신 오류
+            log.error("Failed to send SSE notification: {}", e.getMessage());
+            removeEmitter(userId);
+            throw new InternalServerException(ErrorType.SSE_SEND_ERROR,
+                    "Failed to send notification: " + e.getMessage());
+
+        } catch (IllegalStateException e) {
+            // 이미 완료된 emitter로 전송 시도
+            log.error("Emitter already completed: {}", e.getMessage());
+            removeEmitter(userId);
+            throw new InternalServerException(ErrorType.SSE_COMPLETED_ERROR,
+                    "Emitter already completed");
+
+        } catch (Exception e) {
+            // 기타 예상치 못한 오류
+            log.error("Unexpected error during SSE notification: {}", e.getMessage());
+            removeEmitter(userId);
+            throw new InternalServerException(ErrorType.INTERNAL_SERVER_ERROR,
+                    "Unexpected error during notification");
         }
     }
 
