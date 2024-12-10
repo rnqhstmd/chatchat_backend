@@ -56,7 +56,11 @@ public enum ErrorType {
     KAFKA_SERVER_ERROR("INTERNAL_50002", "카프카 서버 에러입니다."),
     SERIALIZE_ERROR("INTERNAL_50003", "직렬화 중 문제가 발생했습니다."),
     DESERIALIZE_ERROR("INTERNAL_50004", "역직렬화 중 문제가 발생했습니다."),
-    SSE_CONNECTION_ERROR("INTERNAL_50005", "SSE 연결 설정 중 오류가 발생했습니다."),
+    SSE_TIMEOUT_ERROR("INTERNAL_50006", "SSE 연결 시간이 초과되었습니다."),
+    SSE_EMITTER_NOT_FOUND_ERROR("INTERNAL_50007", "SSE Emitter를 찾을 수 없습니다."),
+    SSE_SEND_ERROR("INTERNAL_50008", "SSE 전송 중 오류가 발생했습니다."),
+    SSE_COMPLETED_ERROR("INTERNAL_50009", "SSE Emitter가 이미 완료되었습니다."),
+    SSE_CONNECTION_CLOSED_ERROR("INTERNAL_50010", "SSE 연결이 닫혔습니다."),
 
     // Validation
     NOT_NULL_VALID_ERROR("VALID_90000", "필수값이 누락되었습니다."),
